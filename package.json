@@ -4,7 +4,7 @@
   "description": "tiny flowchart-js lib",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "parcel exapmle/index.html",
+    "dev": "parcel example/index.html",
     "build": "parcel build src/index.js"
   },
   "keywords": [
