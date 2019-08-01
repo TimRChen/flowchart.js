@@ -23,8 +23,8 @@ const container = new Core(svgContainer, {
     },
     linkDot: { // limit 4 props.
         // r: 2,
-        fill: 'deepskyblue',
-        stroke: 'deepskyblue',
+        // fill: 'deepskyblue',
+        // stroke: 'deepskyblue',
         // strokeWidth: 2,
     }
 });
@@ -83,3 +83,7 @@ const node1 = new Node({
 container.addNode(node);
 container.addNode(node1);
 // container.addNode(node2);
+
+// setInterval(() => {
+//     console.log(container.getCoreData());
+// }, 10 * 1000)

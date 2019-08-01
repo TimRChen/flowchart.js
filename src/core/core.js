@@ -110,12 +110,8 @@ export default class Core {
             }
         `;
         // diy dot style.
-        const {
-            r = 2,
-            fill = '#000',
-            stroke = '#000',
-            strokeWidth = 2,
-        } = this.options.linkDot || {};
+        const { r = 2, fill = '#000', stroke = '#000', strokeWidth = 2 } =
+            this.options.linkDot || {};
         graphStyle.innerText += `
                 .link-dot {
                     r: ${r}px;
@@ -128,15 +124,6 @@ export default class Core {
         if (!document.querySelector('.flowchart-core-style')) {
             head.appendChild(graphStyle);
         }
-    }
-
-    /**
-     * 增加节点
-     * @argument {SVGGElement} node
-     */
-    addNode(node) {
-        this.nodes.push(node);
-        this.nodeG.appendChild(node.node);
     }
 
     /**
@@ -200,6 +187,16 @@ export default class Core {
     }
 
     /**
+     * 变更鼠标样式
+     * @argument {string} stage
+     */
+    changeMouseStyle(stage) {
+        let cursor = 'initial';
+        if (stage === 'start') cursor = 'crosshair';
+        Object.assign(this.svgContainer.style, { cursor });
+    }
+
+    /**
      * 节点连接处理
      * @argument {MouseEvent} event - mouse event
      */
@@ -209,10 +206,7 @@ export default class Core {
             // 插入连线预览
             console.log('start link..');
             // 设置连线时鼠标样式
-            Object.assign(this.svgContainer.style, {
-                cursor: 'crosshair',
-            });
-
+            this.changeMouseStyle('start');
             // diy line style.
             let style = {};
             if ('line' in this.options) {
@@ -237,13 +231,21 @@ export default class Core {
         const endLinkNode = this.nodes.find(node => node.dotEndLink !== '');
         if (endLinkNode) {
             console.log('end link.');
-            this.edge.lineData = this.virtualEdge.lineData;
-            this.edge.target = endLinkNode.id;
-            this.edge.dotEndLink = endLinkNode.dotEndLink;
-            // 新连接路径推入路径栈中
-            this.edges.push(this.edge);
-            // 向路径容器中插入路径
-            this.edgeG.appendChild(this.edge.edge);
+            // 设置连线完毕时鼠标样式
+            this.changeMouseStyle('end');
+            // 判断路径是否已存在，对连接路径数进行限制，两个节点之间最大连接路径数为2
+            const edgeExist =
+                this.edges.find(edge => edge.target === endLinkNode.id) ||
+                false;
+            if (!edgeExist) {
+                this.edge.target = endLinkNode.id;
+                this.edge.dotEndLink = endLinkNode.dotEndLink;
+                this.edge.lineData = this.edgeData(this.edge);
+                // 新连接路径推入路径栈中
+                this.edges.push(this.edge);
+                // 向路径容器中插入路径
+                this.edgeG.appendChild(this.edge.edge);
+            }
             // 清空被连接端节点，末尾连接点类型数据
             endLinkNode.dotEndLink = '';
         }
@@ -427,5 +429,36 @@ export default class Core {
     linkDotIsOthers(linkData) {
         let { startX, startY, endX, endY } = linkData;
         return `M ${startX},${startY} L ${endX},${endY}`;
+    }
+
+    /**
+     * 增加节点
+     * @argument {SVGGElement} node
+     */
+    addNode(node) {
+        this.nodes.push(node);
+        this.nodeG.appendChild(node.node);
+    }
+
+    /**
+     * 获取svg JSON数据
+     */
+    getCoreData() {
+        // const nodes = this.nodes.map(node => {
+        //     const { id, linkNode, style } = node;
+        //     return {
+        //         id,
+        //         linkNode,
+        //         style,
+        //     };
+        // });
+        // const edges = this.edges.map(edge => {
+        //     const { id, lineData, source, target, dotLink, dotEndLink } = edge;
+        //     return { id, lineData, source, target, dotLink, dotEndLink };
+        // });
+        return {
+            nodes: this.nodes,
+            edges: this.edges,
+        };
     }
 }
