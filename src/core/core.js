@@ -17,11 +17,12 @@ import {
  * @author TimRChen <timrchen@foxmai.com>
  */
 export default class Core {
-    constructor(svgContainer, options) {
+    constructor(svgContainer, options = {}) {
         // initial class property.
         this.nodes = [];
         this.edges = [];
         this.svgContainer = svgContainer;
+        this.options = options;
         this.nodeG = this.createGroup(svgContainer, 'graph');
         this.virtualG = this.createGroup(svgContainer, 'virtual-edge');
         this.edgeG = this.createGroup(svgContainer, 'edges');
@@ -75,6 +76,24 @@ export default class Core {
         marker.setAttribute('markerHeight', '10');
         marker.setAttribute('orient', 'auto');
         path.setAttribute('d', 'M1,2 L8,6 L1,10 Z');
+        // diy arrow style.
+        if ('line' in this.options) {
+            if ('arrow' in this.options.line) {
+                const line = this.options.line;
+                if ('style' in line.arrow) {
+                    Object.assign(path.style, line.arrow.style);
+                }
+                if ('d' in line.arrow && typeof line.arrow.d === 'string') {
+                    path.setAttribute('d', line.arrow.d);
+                }
+                if (
+                    'viewBox' in line.arrow &&
+                    typeof line.arrow.viewBox === 'string'
+                ) {
+                    marker.setAttribute('viewBox', line.arrow.viewBox);
+                }
+            }
+        }
         marker.appendChild(path);
         defs.appendChild(marker);
         container.appendChild(defs);
@@ -84,18 +103,28 @@ export default class Core {
         graphStyle.setAttribute('class', 'flowchart-core-style');
         const head = document.querySelector('head');
         graphStyle.innerText = `
-            .link-dot {
-                r: 2px;
-                stroke-width: 2px;
-                stroke: #000;
-                transition: all 0.2s ease-in-out;
-            }
             .link-dot:hover {
                 r: 12px!important;
                 stroke: red!important;
                 fill: transparent!important;
             }
         `;
+        // diy dot style.
+        const {
+            r = 2,
+            fill = '#000',
+            stroke = '#000',
+            strokeWidth = 2,
+        } = this.options.linkDot || {};
+        graphStyle.innerText += `
+                .link-dot {
+                    r: ${r}px;
+                    fill: ${fill};
+                    stroke: ${stroke};
+                    stroke-width: ${strokeWidth}px;
+                    transition: all 0.2s ease-in-out;
+                }
+            `;
         if (!document.querySelector('.flowchart-core-style')) {
             head.appendChild(graphStyle);
         }
@@ -127,7 +156,6 @@ export default class Core {
     svgMouseMove(event) {
         // 拖拽节点
         this.handleDragNode(event);
-
         // 连接节点
         this.handleLinkNode(event);
     }
@@ -139,7 +167,6 @@ export default class Core {
     svgMouseUp() {
         // 处理连接至另一节点，即连接完毕
         this.handleLinkNodeOver();
-
         // 连线后初始化相关变量
         this.initializeLinkEnv();
     }
@@ -181,9 +208,23 @@ export default class Core {
         if (linkNode) {
             // 插入连线预览
             console.log('start link..');
-            this.edge = new Edge();
+            // 设置连线时鼠标样式
+            Object.assign(this.svgContainer.style, {
+                cursor: 'crosshair',
+            });
+
+            // diy line style.
+            let style = {};
+            if ('line' in this.options) {
+                if ('style' in this.options.line) {
+                    style = this.options.line.style;
+                }
+            }
+            // 生成edge实例
+            this.edge = new Edge({ style });
             this.edge.source = linkNode.id;
             this.edge.dotLink = linkNode.dotLink;
+            // 插入虚拟edge实例
             this.virtualG.appendChild(this.virtualEdge.edge);
             this.virtualEdge.lineData = this.caclPathDragData(linkNode, event);
         }

@@ -6,8 +6,8 @@ import { getRandomInt, creatSvgElement } from '../utils/tools.js';
  * @author TimRChen <timrchen@foxmai.com>
  */
 export default class Node {
-    constructor(params) {
-        const { style = {} } = params;
+    constructor(config) {
+        const { style = {}, html = {} } = config;
         const defaultStyle = {
             width: 140,
             height: 70,
@@ -19,23 +19,24 @@ export default class Node {
         // initial class property.
         this.id = getRandomInt();
         this.node = {};
+        this.html = html;
         this.style = Object.assign(defaultStyle, style);
         this.dotLink = ''; // 节点起始连接端点
         this.dotEndLink = ''; // 节点终止连接端点
         this.mousedownNode = false; // 标记当前节点拖拽状态
         this.linkActive = false; // 此对象标记当前连线状态
         this.linkNode = {}; // 此对象标记每个连接点的位置
-        this.watchProperty(params);
+        this.watchProperty(config);
 
         this.initializeNode();
     }
 
     /**
      * 监听属性变化
-     * @argument {Object} params
+     * @argument {Object} config
      */
-    watchProperty(params) {
-        let { position } = params;
+    watchProperty(config) {
+        let { position } = config;
         // position属性值可追溯
         Object.defineProperty(this, 'position', {
             get: () => position,
@@ -100,14 +101,26 @@ export default class Node {
     createNode(style) {
         let nodeContainer = creatSvgElement('g');
         nodeContainer.setAttribute('class', 'node-container');
-        let node = creatSvgElement('rect');
-        node.setAttribute('class', 'node');
+        if ('meta' in this.html && this.html.meta) {
+            // could diy svg dom structure.
+            let foreignObjectDom = creatSvgElement('foreignObject');
+            foreignObjectDom.setAttribute('class', 'node');
+            // 将diy节点样式插入foreignObject中
+            foreignObjectDom.appendChild(this.html.meta);
+            // 初始化节点样式
+            foreignObjectDom = this.initialNodeStyle(foreignObjectDom, style);
+            nodeContainer.appendChild(foreignObjectDom);
+        } else {
+            // default
+            let node = creatSvgElement('rect'); // default node style.
+            node.setAttribute('class', 'node');
+            // 初始化节点样式
+            node = this.initialNodeStyle(node, style);
+            nodeContainer.appendChild(node);
+        }
         // 设置节点位置
         const { x, y } = this.position;
         nodeContainer.style.transform = `translate(${x}px, ${y}px)`;
-        // 初始化节点样式
-        node = this.initialNodeStyle(node, style);
-        nodeContainer.appendChild(node);
         // 实例化节点连接点
         nodeContainer = this.initializeLinkDot(nodeContainer, style);
         // 节点绑定事件
@@ -137,7 +150,7 @@ export default class Node {
 
     /**
      * 初始化节点样式
-     * @argument {SVGGElement} node
+     * @argument {*} node
      * @argument {Object} style
      */
     initialNodeStyle(node, style) {

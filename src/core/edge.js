@@ -18,9 +18,8 @@ export default class Edge {
         this.watchProperty();
 
         // 连线样式覆盖
-        const { style } = options;
-        if (style) {
-            Object.assign(this.edge.style, style);
+        if ('style' in options) {
+            Object.assign(this.edge.style, options.style);
         }
     }
 
@@ -62,6 +61,7 @@ export default class Edge {
      * @argument {SVGPathElement} edge
      */
     initializeStyle(edge) {
+        // default style
         Object.assign(edge.style, {
             fill: 'none',
             stroke: '#000',
