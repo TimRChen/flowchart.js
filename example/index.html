@@ -16,24 +16,24 @@
                 border-radius: 4px;
                 background-color: #fff;
             }
-            .node-html>.main {
+            .node-html > .main {
                 display: flex;
                 flex-flow: column;
                 border-bottom: 1px solid #000;
                 padding: 20px;
             }
-            .main>.head {
+            .main > .head {
                 display: flex;
                 align-items: center;
                 margin-bottom: 12px;
             }
-            .head>.tag {
+            .head > .tag {
                 border: 1px solid #000;
                 border-radius: 4px;
                 font-size: 12px;
                 text-align: center;
             }
-            .head>.title {
+            .head > .title {
                 margin-left: 12px;
                 font-size: 14px;
             }
@@ -41,23 +41,54 @@
                 display: flex;
                 justify-content: space-between;
             }
-            .body>.left {
+            .body > .left {
                 font-size: 14px;
             }
-            .left>.keywords {
+            .left > .keywords {
                 color: deepskyblue;
             }
-            .node-html>.desc {
+            .node-html > .desc {
                 margin: 0 0 20px 20px;
             }
-            .node-html>.desc>.txt {
+            .node-html > .desc > .txt {
                 font-size: 14px;
+            }
+
+            .node-html > .operation > .btn {
+                width: 22px;
+                height: 22px;
+                color: deepskyblue;
+                border: 2px solid deepskyblue;
+                border-radius: 24px;
+                font-size: 22px;
+                display: flex;
+                user-select: none;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                background-color: #fff;
+            }
+
+            .operation > .bottom {
+                position: absolute;
+                bottom: 0px;
+                left: 44%;
+            }
+
+            .operation > .right {
+                position: absolute;
+                top: 42%;
+                right: 0px;
             }
 
         </style>
     </head>
     <body>
-        <svg id="svg-container" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg
+            id="svg-container"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+        ></svg>
 
         <div class="node-html block-1">
             <div class="main">
@@ -73,29 +104,71 @@
                 </div>
             </div>
             <div class="desc">
-                <div class="name txt">黄睿晨</div>
+                <div class="name txt">黄某</div>
                 <div class="title txt">技术部/业务中台/前端开发</div>
+            </div>
+            <div class="operation">
+                <div class="btn bottom main-node-decrease">-</div>
+                <div class="btn right main-node-decrease">-</div>
             </div>
         </div>
 
         <div class="node-html block-2">
-                <div class="main">
-                    <div class="head">
-                        <div class="tag">第3季度</div>
-                        <div class="title">这里是标题</div>
-                    </div>
-                    <div class="body">
-                        <div class="left">
-                            关键结果：<span class="keywords">5</span>
-                        </div>
-                        <div class="percent-circle">99%</div>
-                    </div>
+            <div class="main">
+                <div class="head">
+                    <div class="tag">第3季度</div>
+                    <div class="title">这里是标题</div>
                 </div>
-                <div class="desc">
-                    <div class="name txt">黄睿晨</div>
-                    <div class="title txt">技术部/业务中台/前端开发</div>
+                <div class="body">
+                    <div class="left">
+                        关键结果：<span class="keywords">5</span>
+                    </div>
+                    <div class="percent-circle">99%</div>
                 </div>
             </div>
+            <div class="desc">
+                <div class="name txt">黄某</div>
+                <div class="title txt">技术部/业务中台/前端开发</div>
+            </div>
+        </div>
+
+        <div class="node-html block-3">
+            <div class="main">
+                <div class="head">
+                    <div class="tag">第4季度</div>
+                    <div class="title">这里是标题</div>
+                </div>
+                <div class="body">
+                    <div class="left">
+                        关键结果：<span class="keywords">5</span>
+                    </div>
+                    <div class="percent-circle">100%</div>
+                </div>
+            </div>
+            <div class="desc">
+                <div class="name txt">黄某</div>
+                <div class="title txt">技术部/业务中台/前端开发</div>
+            </div>
+        </div>
+
+        <div class="node-html block-4">
+            <div class="main">
+                <div class="head">
+                    <div class="tag">第1季度</div>
+                    <div class="title">这里是标题</div>
+                </div>
+                <div class="body">
+                    <div class="left">
+                        关键结果：<span class="keywords">5</span>
+                    </div>
+                    <div class="percent-circle">100%</div>
+                </div>
+            </div>
+            <div class="desc">
+                <div class="name txt">黄某</div>
+                <div class="title txt">技术部/业务中台/前端开发</div>
+            </div>
+        </div>
 
         <script src="./example.js"></script>
     </body>

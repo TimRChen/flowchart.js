@@ -1,2 +1,5 @@
 .cache
 node_modules
+dist/example*
+dist/index.html
+dist/index.js.map

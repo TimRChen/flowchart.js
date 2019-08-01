@@ -131,8 +131,11 @@ export default class Core {
      * @argument {SVGElement} container
      */
     bindMouseEvent(container) {
-        container.onmousemove = this.svgMouseMove.bind(this);
-        container.onmouseup = this.svgMouseUp.bind(this);
+        if (this.options.control) {
+            // 用户设置为可控制时，绑定相关事件
+            container.onmousemove = this.svgMouseMove.bind(this);
+            container.onmouseup = this.svgMouseUp.bind(this);
+        }
     }
 
     /**
@@ -438,6 +441,28 @@ export default class Core {
     addNode(node) {
         this.nodes.push(node);
         this.nodeG.appendChild(node.node);
+    }
+
+    /**
+     * 删除节点
+     * @argument {SVGGElement} node
+     */
+    deleteNode(node) {
+        const index = this.nodes.findIndex(n => n.id === node.id);
+        if (index !== -1) {
+            this.nodes.splice(index, 1);
+        }
+    }
+
+    /**
+     * 删除路径
+     * @argument {SVGPathElement} edge
+     */
+    deleteEdge(edge) {
+        const index = this.edges.findIndex(e => e.id === edge.id);
+        if (index !== -1) {
+            this.edges.splice(index, 1);
+        }
     }
 
     /**
