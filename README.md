@@ -1,5 +1,11 @@
+[![GitHub stars](https://img.shields.io/github/stars/TimRChen/flowchart-core.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/TimRChen/flowchart-core.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core/issues)
+[![GitHub forks](https://img.shields.io/github/forks/TimRChen/flowchart-core.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core/network)
+[![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core)
+
 # Flowchart-core.js
-A Tiny svg flowchart.js, Quickly use to solve simple process configuration needs.
+A Tiny svg flowchart.js, Quickly use to solve simple process configuration  musts.
 
 # Example
 ```bash
@@ -52,61 +58,110 @@ container.addNode(node);
 
 # API Reference
 
-#### `new Core(svgElement, options)`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| svgElement | `SvgElement` | `1` |
-| options    | `coreOptions`      | `1` |
+### `new Core(svgElement, options)`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| svgElement | `SvgElement<svg>` | *Svg DOM element* | `1` |
+| options    | `coreOptions` | *core config options* | `1` |
 
 #### `coreOptions`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| style | `stylesheet` | `1` |
-| line | `lineObject` | `0` |
-| linkDot | `linkDotObject` | `0` |
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| style | `stylesheet` | *css style* | `1` |
+| line | `lineObject` | *link path config* | `0` |
+| linkDot | `linkDotObject` | *link dot config* | `0` |
+| control | `Boolean` | *(true)link-mode. (false)render-mode.* | `1` |
 
-#### coreOptions->`lineObject`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| style | `stylesheet` | `1` |
-| arrow | `arrowObject` | `0` |
+##### *line*: `lineObject`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| style | `stylesheet` | *css style* | `0` |
+| arrow | `arrowObject` | *line arrow config* | `0` |
 
-#### coreOptions->`linkDotObject`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| r | `radius` | `0` |
-| fill | `fill color` | `0` |
-| stroke | `stroke color` | `0` |
-| strokeWidth | `stroke width` | `0` |
+##### *arrow*: `arrowObject`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| style | `stylesheet` | *css style* | `0` |
+| viewBox | `String` | *svg viewBox* | `0` |
 
-#### coreOptions->lineObject->`arrowObject`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| style | `stylesheet` | `1` |
-| viewBox | `String` | `0` |
+##### *linkDot*: `linkDotObject` 
+>##### (Only the following table styles can be used)
 
-#### `new Node(config)`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| config | `nodeConfig` | `1` |
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| r | `radius` | \<circle> *attr `r` radius* | `0` |
+| fill | `fill color` | *color* | `0` |
+| stroke | `stroke color` | *color* | `0` |
+| strokeWidth | `stroke width` | *px* | `0` |
+
+### `new Node(config)`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| config | `nodeConfig` | `1` | `1` |
 
 #### `nodeConfig`
-| prop       | type     |default |
-| :--------  | :-----   | :---- |
-| style | `stylesheet` | `1` |
-| position | `{ x: axis, y: axis }` | `1` |
-| html | `{ meta: DomInstance }` | `1` |
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| style | `stylesheet` | *css style* | `1` |
+| position | `positionObject` | *node position in svg* | `1` |
+| html | `htmlObject` | `1` | `1` |
 
+##### *nodeConfig*: `positionObject`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| x | `px` | *axis* | `1` |
+| y | `px` | *axis* | `1` |
+
+
+##### *nodeConfig*: `htmlObject`
+| prop       | type     | desc | must |
+| :--------  | :-----   | :---- | :---- |
+| meta | `DomInstance` | *Dom element* | `1` |
 
 # Methods
+
 #### Core Methods
-| prop       | type     |default |
+| prop       | type     | desc |
 | :--------  | :-----   | :---- |
-| addNode | `Function` | `1` |
+| `addNode`(node) | `Function` | *add node in Svg* |
+| `edgeData`(edge) | `Function` | *return edge data* |
+| `deleteNode`(node) | `Function` | *delete node `(just delete nodes data)`* |
+| `deleteEdge`(edge) | `Function` | *delete edge `(just delete edges data)`* |
+
+
+# Class Attributes
+> More `complex effects` can be achieved through these exposure methods.
+
+## `Core`
+| prop       | type     | desc |
+| :--------  | :-----   | :---- |
+| nodes | `Array<Object>` | *node list* |
+| edges | `Array<Object>` | *edge list* |
+| svgContainer | `SvgElement<svg>` | *Svg Dom* |
+| nodeG | `SvgElement<g>` | *\<g> tag* |
+| edgeG | `SvgElement<g>` | *\<g> tag* |
+
+
+## `Node`
+| prop       | type     | desc |
+| :--------  | :-----   | :---- |
+| id | `Number` | *unique node id* |
+| node | `SvgElement<g>` | *node container \<g>* |
+
+## `Edge`
+| prop       | type     | desc |
+| :--------  | :-----   | :---- |
+| id | `Number` | *unique edge id* |
+| source | `Number` | *link line source node id* |
+| target | `Number` | *link line target node id* |
+| dotLink | `String` | *node link start dot marker* |
+| dotEndLink | `String` | *node link end dot marker* |
+| lineData | `String` | *link path data. \<path> prop `d`* |
 
 
 # Example
-more example
+#### [check more example (how to `embed self define div node`)](./example/example.js)
+
 ```js
 import { Core, Node } from 'flowchart-core';
 

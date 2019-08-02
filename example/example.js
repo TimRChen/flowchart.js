@@ -1,4 +1,3 @@
-// import { Core, Node } from '../dist/index.js';
 import { Core, Node, Edge } from '../src/index.js';
 
 const svgContainer = document.getElementById('svg-container');
@@ -30,7 +29,7 @@ const container = new Core(svgContainer, {
         fill: 'transparent',
         stroke: 'transparent',
     },
-    control: false, // must need. 是否可配置流程
+    control: false, // must need. default is false 是否可配置流程
 });
 
 // 从这里开始是业务逻辑.
@@ -163,45 +162,70 @@ container.edgeG.appendChild(edge3.edge);
 
 // 收展节点.
 const bottomDecrease = document.querySelector('.bottom.main-node-decrease');
-bottomDecrease.onclick = function() {
+let clickFlag = false;
+bottomDecrease.onclick = function controlClo () {
     const { nodes, edges } = container;
     const cNode1 = nodes.find(node => node.id === childNode1.id);
     const cNode2 = nodes.find(node => node.id === childNode2.id);
-    if (cNode1 && cNode2) {
-        container.deleteNode(childNode1);
-        container.deleteNode(childNode2);
-        container.nodeG.removeChild(childNode1.node);
-        container.nodeG.removeChild(childNode2.node);
+    if (!clickFlag) {
+        // close
+        clickFlag = true;
+        // Method 1 (recommand use):
+        const closeStyle = { display: 'none' };
+        Object.assign(childNode1.node.style, closeStyle);
+        Object.assign(childNode2.node.style, closeStyle);
+        // Method 2:
+        // container.deleteNode(childNode1);
+        // container.deleteNode(childNode2);
+        // container.nodeG.removeChild(childNode1.node);
+        // container.nodeG.removeChild(childNode2.node);
 
         const cNode1Line = edges.find(edge => edge.target === cNode1.id);
         const cNode2Line = edges.find(edge => edge.target === cNode2.id);
         if (cNode1Line && cNode2Line) {
-            container.deleteEdge(cNode1Line);
-            container.deleteEdge(cNode2Line);
-            container.edgeG.removeChild(cNode1Line.edge);
-            container.edgeG.removeChild(cNode2Line.edge);
+            // Method 1 (recommand use):
+            Object.assign(cNode1Line.edge.style, closeStyle);
+            Object.assign(cNode2Line.edge.style, closeStyle);
+            // Method 2:
+            // container.deleteEdge(cNode1Line);
+            // container.deleteEdge(cNode2Line);
+            // container.edgeG.removeChild(cNode1Line.edge);
+            // container.edgeG.removeChild(cNode2Line.edge);
         }
     } else {
-        container.addNode(childNode1);
-        container.addNode(childNode2);
-        const edge1 = new Edge(blueLineStyle);
-        const edge2 = new Edge(blueLineStyle);
-        edge1.source = mainNode.id;
-        edge1.target = childNode1.id;
+        // open
+        clickFlag = false;
+        // Method 1 (recommand use):
+        const openStyle = { display: 'unset' };
+        Object.assign(childNode1.node.style, openStyle);
+        Object.assign(childNode2.node.style, openStyle);
+        const cNode1Line = edges.find(edge => edge.target === cNode1.id);
+        const cNode2Line = edges.find(edge => edge.target === cNode2.id);
+        if (cNode1Line && cNode2Line) {
+            Object.assign(cNode1Line.edge.style, openStyle);
+            Object.assign(cNode2Line.edge.style, openStyle);
+        }
+        // Method 2:
+        // container.addNode(childNode1);
+        // container.addNode(childNode2);
+        // const edge1 = new Edge(blueLineStyle);
+        // const edge2 = new Edge(blueLineStyle);
+        // edge1.source = mainNode.id;
+        // edge1.target = childNode1.id;
         
-        edge2.source = mainNode.id;
-        edge2.target = childNode2.id;
+        // edge2.source = mainNode.id;
+        // edge2.target = childNode2.id;
 
-        edge1.dotLink = 'bottom';
-        edge1.dotEndLink = 'top';
+        // edge1.dotLink = 'bottom';
+        // edge1.dotEndLink = 'top';
         
-        edge2.dotLink = 'bottom';
-        edge2.dotEndLink = 'top';
-        edge1.lineData = container.edgeData(edge1);
-        edge2.lineData = container.edgeData(edge2);
+        // edge2.dotLink = 'bottom';
+        // edge2.dotEndLink = 'top';
+        // edge1.lineData = container.edgeData(edge1);
+        // edge2.lineData = container.edgeData(edge2);
 
-        container.edges = [edge1, edge2, ...container.edges];
-        container.edgeG.appendChild(edge1.edge);
-        container.edgeG.appendChild(edge2.edge);
+        // container.edges = [edge1, edge2, ...container.edges];
+        // container.edgeG.appendChild(edge1.edge);
+        // container.edgeG.appendChild(edge2.edge);
     }
 };
