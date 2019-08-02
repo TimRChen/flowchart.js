@@ -62,21 +62,21 @@ container.addNode(node);
 | prop       | type     | desc | must |
 | :--------  | :-----   | :---- | :---- |
 | svgElement | `SvgElement<svg>` | *Svg DOM element* | `1` |
-| options    | `coreOptions` | *core config options* | `1` |
+| options    | [`coreOptions`](#coreoptions) | *core config options* | `1` |
 
 #### `coreOptions`
 | prop       | type     | desc | must |
 | :--------  | :-----   | :---- | :---- |
 | style | `stylesheet` | *css style* | `1` |
-| line | `lineObject` | *link path config* | `0` |
-| linkDot | `linkDotObject` | *link dot config* | `0` |
+| line | [`lineObject`](#line-lineobject) | *link path config* | `0` |
+| linkDot | [`linkDotObject`](#linkdot-linkdotobject) | *link dot config* | `0` |
 | control | `Boolean` | *(true)link-mode. (false)render-mode.* | `1` |
 
 ##### *line*: `lineObject`
 | prop       | type     | desc | must |
 | :--------  | :-----   | :---- | :---- |
 | style | `stylesheet` | *css style* | `0` |
-| arrow | `arrowObject` | *line arrow config* | `0` |
+| arrow | [`arrowObject`](#arrow-arrowobject) | *line arrow config* | `0` |
 
 ##### *arrow*: `arrowObject`
 | prop       | type     | desc | must |
@@ -103,8 +103,8 @@ container.addNode(node);
 | prop       | type     | desc | must |
 | :--------  | :-----   | :---- | :---- |
 | style | `stylesheet` | *css style* | `1` |
-| position | `positionObject` | *node position in svg* | `1` |
-| html | `htmlObject` | `1` | `1` |
+| position | [`positionObject`](#nodeconfig-positionobject) | *node position in svg* | `1` |
+| html | [`htmlObject`](#nodeconfig-htmlobject) | `1` | `1` |
 
 ##### *nodeConfig*: `positionObject`
 | prop       | type     | desc | must |
