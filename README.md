@@ -4,6 +4,9 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://github.com/TimRChen/flowchart-core)
 
+[![NPM](https://nodei.co/npm/flowchart-core.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/flowchart-core)
+[![NPM](https://nodei.co/npm-dl/flowchart-core.png?months=9&height=3)](https://www.npmjs.com/package/flowchart-core)
+
 # Flowchart-core.js
 A Tiny svg flowchart.js, Quickly use to solve simple process configuration  musts.
 
@@ -152,10 +155,11 @@ container.addNode(node);
 | prop       | type     | desc |
 | :--------  | :-----   | :---- |
 | id | `Number` | *unique edge id* |
-| source | `Number` | *link line source node id* |
-| target | `Number` | *link line target node id* |
-| dotLink | `String` | *node link start dot marker* |
-| dotEndLink | `String` | *node link end dot marker* |
+| edge | `SvgElement<g>` | *node container \<g>* |
+| source | `Number` | *source node id* |
+| target | `Number` | *target node id* |
+| dotLink | `String` | node start link dot's position: top \| bottom\| left \| right |
+| dotEndLink | `String` | node end link dot's position: top \| bottom \| left \| right |
 | lineData | `String` | *link path data. \<path> prop `d`* |
 
 
