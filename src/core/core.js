@@ -113,7 +113,7 @@ export default class Core {
             `;
         }
         // diy dot style.
-        const { r = 2, fill = '#000', stroke = '#000', strokeWidth = 2 } =
+        const { r = 2, fill = '#000', stroke = '#000', strokeWidth = 2, display = 'unset' } =
             this.options.linkDot || {};
         graphStyle.innerText += `
                 .link-dot {
@@ -122,6 +122,7 @@ export default class Core {
                     stroke: ${stroke};
                     stroke-width: ${strokeWidth}px;
                     transition: all 0.2s ease-in-out;
+                    display: ${display};
                 }
             `;
         if (!document.querySelector('.flowchart-core-style')) {
