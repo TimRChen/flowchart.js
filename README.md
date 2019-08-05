@@ -11,12 +11,11 @@
 
 A Tiny svg flowchart.js, Quickly use to solve simple process configuration musts.
 
-
-- self define html embed node
+-   self define html embed node
 
 ![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
 
-- flowchart config.
+-   flowchart config.
 
 ![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
@@ -96,33 +95,33 @@ container.addNode(node);
 
 -   #### Usage:
 
-```js
-const options = {
-    style: {
-        width: '100vw',
-        height: '100vh',
-        border: '1px dashed #000',
-    },
-    line: {
+    ```js
+    const options = {
         style: {
-            stroke: 'deepskyblue',
+            width: '100vw',
+            height: '100vh',
+            border: '1px dashed #000',
         },
-        arrow: {
+        line: {
             style: {
-                fill: 'deepskyblue',
+                stroke: 'deepskyblue',
             },
-            viewBox: '0 0 18 18',
-            d: 'M1,2 L8,6 L1,10 Z',
+            arrow: {
+                style: {
+                    fill: 'deepskyblue',
+                },
+                viewBox: '0 0 18 18',
+                d: 'M1,2 L8,6 L1,10 Z',
+            },
         },
-    },
-    linkDot: {
-        r: 2,
-        fill: 'deepskyblue',
-        stroke: 'deepskyblue',
-        strokeWidth: 2,
-    },
-};
-```
+        linkDot: {
+            r: 2,
+            fill: 'deepskyblue',
+            stroke: 'deepskyblue',
+            strokeWidth: 2,
+        },
+    };
+    ```
 
 ##### _line_: `lineObject`
 
@@ -165,30 +164,30 @@ link line props.
 -   #### Type: `{ style: {}, position: { x, y }, html: { meta } }`
 -   #### Arguments:
 
-| prop     | type                                           | desc                   | must |
-| :------- | :--------------------------------------------- | :--------------------- | :--- |
-| style    | `stylesheet`                                   | _css style_            | `1`  |
-| position | [`positionObject`](#nodeconfig-positionobject) | _node position in svg_ | `1`  |
-| html     | [`htmlObject`](#nodeconfig-htmlobject)         | `1`                    | `1`  |
+    | prop     | type                                           | desc                   | must |
+    | :------- | :--------------------------------------------- | :--------------------- | :--- |
+    | style    | `stylesheet`                                   | _css style_            | `1`  |
+    | position | [`positionObject`](#nodeconfig-positionobject) | _node position in svg_ | `1`  |
+    | html     | [`htmlObject`](#nodeconfig-htmlobject)         | `1`                    | `1`  |
 
 -   #### Usage:
 
-```js
-const config = {
-    position: {
-        // node position in svg.
-        x: 100,
-        y: 150,
-    },
-    style: {
-        width: 140,
-        height: 70,
-    },
-    html: {
-        meta: '<div>...</div>', // html template.
-    },
-};
-```
+    ```js
+    const config = {
+        position: {
+            // node position in svg.
+            x: 100,
+            y: 150,
+        },
+        style: {
+            width: 140,
+            height: 70,
+        },
+        html: {
+            meta: '<div>...</div>', // html template.
+        },
+    };
+    ```
 
 ##### _nodeConfig_: `positionObject`
 
@@ -222,22 +221,22 @@ const config = {
 
 -   #### Arguments:
 
-| prop         | type              | desc                        |
-| :----------- | :---------------- | :-------------------------- |
-| svgContainer | `SvgElement<svg>` | _Svg Dom_                   |
-| nodes        | `Array<Object>`   | _node dom list_             |
-| edges        | `Array<Object>`   | _edge dom list_             |
-| nodeG        | `SvgElement<g>`   | _\<g> tag. nodes container_ |
-| edgeG        | `SvgElement<g>`   | _\<g> tag. edges container_ |
+    | prop         | type              | desc                        |
+    | :----------- | :---------------- | :-------------------------- |
+    | svgContainer | `SvgElement<svg>` | _Svg Dom_                   |
+    | nodes        | `Array<Object>`   | _node dom list_             |
+    | edges        | `Array<Object>`   | _edge dom list_             |
+    | nodeG        | `SvgElement<g>`   | _\<g> tag. nodes container_ |
+    | edgeG        | `SvgElement<g>`   | _\<g> tag. edges container_ |
 
 -   #### Usage:
 
-```js
-// eg. how to appendChild a edge in core instance.
-const coreInstance = new Core(svgContainer, { ... });
-const edgeInstance = new Edge({ ... });
-coreInstance.edgeG.appendChild(edgeInstance.edge);
-```
+    ```js
+    // eg. how to appendChild a edge in core instance.
+    const coreInstance = new Core(svgContainer, { ... });
+    const edgeInstance = new Edge({ ... });
+    coreInstance.edgeG.appendChild(edgeInstance.edge);
+    ```
 
 ### `Node`
 
@@ -252,58 +251,58 @@ coreInstance.edgeG.appendChild(edgeInstance.edge);
 
 -   #### Usage:
 
-```js
-// eg. how to make a node instance visible or hidden.
-const nodeInstance = new Node({
-    position: {
-        x: 100,
-        y: 100,
-    },
-    style: {
-        width,
-        height,
-    },
-});
-// hidden.
-Object.assign(nodeInstance.node.style, { display: 'none' });
-// visible.
-Object.assign(nodeInstance.node.style, { display: 'initial' });
-```
+    ```js
+    // eg. how to make a node instance visible or hidden.
+    const nodeInstance = new Node({
+        position: {
+            x: 100,
+            y: 100,
+        },
+        style: {
+            width,
+            height,
+        },
+    });
+    // hidden.
+    Object.assign(nodeInstance.node.style, { display: 'none' });
+    // visible.
+    Object.assign(nodeInstance.node.style, { display: 'initial' });
+    ```
 
 ### `Edge`
 
 -   #### Arguments:
 
-| prop       | type            | desc                                                          |
-| :--------- | :-------------- | :------------------------------------------------------------ |
-| id         | `Number`        | _unique edge id_                                              |
-| edge       | `SvgElement<g>` | _node container \<g>_                                         |
-| source     | `Number`        | _source node id_                                              |
-| target     | `Number`        | _target node id_                                              |
-| dotLink    | `String`        | node start link dot's position: top \| bottom\| left \| right |
-| dotEndLink | `String`        | node end link dot's position: top \| bottom \| left \| right  |
-| lineData   | `String`        | _link path data. \<path> prop `d`_                            |
+    | prop       | type            | desc                                                          |
+    | :--------- | :-------------- | :------------------------------------------------------------ |
+    | id         | `Number`        | _unique edge id_                                              |
+    | edge       | `SvgElement<g>` | _node container \<g>_                                         |
+    | source     | `Number`        | _source node id_                                              |
+    | target     | `Number`        | _target node id_                                              |
+    | dotLink    | `String`        | node start link dot's position: top \| bottom\| left \| right |
+    | dotEndLink | `String`        | node end link dot's position: top \| bottom \| left \| right  |
+    | lineData   | `String`        | _link path data. \<path> prop `d`_                            |
 
 -   #### Usage:
 
-```js
-// eg. create edge instance & append child on svg
-const coreInstance = new Core(svgContainer, { ... })
-const edgeInstance = new Edge({
-    style: {
-        stroke: 'deepskyblue',
-    },
-});
-Object.assign(edgeInstance, {
-    source: xNodeInstance.id,
-    target: xxNodeInstance.id,
-    dotLink: 'bottom',
-    dotEndLink: 'top',
-});
-// key step.
-edgeInstance.lineData = coreInstance.edgeData(edgeInstance);
-coreInstance.edgeG.appendChild(edgeInstance.edge);
-```
+    ```js
+    // eg. create edge instance & append child on svg
+    const coreInstance = new Core(svgContainer, { ... })
+    const edgeInstance = new Edge({
+        style: {
+            stroke: 'deepskyblue',
+        },
+    });
+    Object.assign(edgeInstance, {
+        source: xNodeInstance.id,
+        target: xxNodeInstance.id,
+        dotLink: 'bottom',
+        dotEndLink: 'top',
+    });
+    // key step.
+    edgeInstance.lineData = coreInstance.edgeData(edgeInstance);
+    coreInstance.edgeG.appendChild(edgeInstance.edge);
+    ```
 
 ## Example
 
