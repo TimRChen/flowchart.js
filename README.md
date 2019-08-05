@@ -11,6 +11,8 @@
 
 A Tiny svg flowchart.js, Quickly use to solve simple process configuration musts.
 
+[查看简体中文](https://github.com/TimRChen/flowchart-core/blob/master/README_CN.md)
+
 -   self define html embed node
 
 ![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
@@ -18,6 +20,13 @@ A Tiny svg flowchart.js, Quickly use to solve simple process configuration musts
 -   flowchart config.
 
 ![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
+
+
+## Advantage
+Two configurable modes: link-mode and render-mode.
+> link-mode: `Quickly` configure a flow chart for `dragging` and `dropping connections` between nodes
+
+> render-mode: `Quickly` configure a `non-dragable connection` between nodes and a `non-removable` node as a graph for `statically` drawing topological relationships
 
 ## Install
 
@@ -191,10 +200,10 @@ link line props.
 
 ##### _nodeConfig_: `positionObject`
 
-| prop | type     | desc   | must |
-| :--- | :------- | :----- | :--- |
-| x    | `x axis` | _axis_ | `1`  |
-| y    | `y axis` | _axis_ | `1`  |
+| prop | type     | desc                                                                                        | must |
+| :--- | :------- | :------------------------------------------------------------------------------------------ | :--- |
+| x    | `x axis` | _[MouseEvent.clientX](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientX)_ | `1`  |
+| y    | `y axis` | _[MouseEvent.clientY](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientY)_ | `1`  |
 
 ##### _nodeConfig_: `htmlObject`
 
@@ -276,7 +285,7 @@ link line props.
     | prop       | type            | desc                                                          |
     | :--------- | :-------------- | :------------------------------------------------------------ |
     | id         | `Number`        | _unique edge id_                                              |
-    | edge       | `SvgElement<g>` | _node container \<g>_                                         |
+    | edge       | `SvgElement<g>` | _edge container \<g>_                                         |
     | source     | `Number`        | _source node id_                                              |
     | target     | `Number`        | _target node id_                                              |
     | dotLink    | `String`        | node start link dot's position: top \| bottom\| left \| right |
@@ -306,7 +315,7 @@ link line props.
 
 ## Example
 
-#### [Recommand to check more example (`how to embed self define div node`)](./example/example.js)
+#### [Recommand to check more example (`how to embed self define div node`)](https://github.com/TimRChen/flowchart-core/blob/master/example/example.js)
 
 ```js
 import { Core, Node } from 'flowchart-core';
