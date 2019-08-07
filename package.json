@@ -2,10 +2,10 @@
   "name": "flowchart-core",
   "version": "1.0.3",
   "description": "tiny flowchart-js lib",
-  "main": "dist/index.js",
+  "main": "dist/flowchart-core.min.js",
   "scripts": {
     "dev": "parcel example/index.html",
-    "build": "parcel build src/index.js"
+    "build": "parcel build src/index.js --out-file flowchart-core.min.js --no-source-maps --no-cache --global flowchart-core"
   },
   "keywords": [
     "flowchart"
