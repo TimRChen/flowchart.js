@@ -9,7 +9,7 @@
 
 # flowchart-core
 
-A Tiny svg flowchart.js, Quickly use to solve simple process configuration musts.
+A tiny svg flowchart javascript lib, Ability to quickly meet simple process configuration and rendering needs.
 
 [查看简体中文](https://github.com/TimRChen/flowchart-core/blob/master/README_CN.md)
 
