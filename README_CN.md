@@ -19,9 +19,10 @@
 
 ![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
-
 ## 特点
+
 可配置两种模式：连接模式&渲染模式
+
 > 连接模式：`快速`配置一个节点间`可拖拽连接`、`移动`节点的流程图
 
 > 渲染模式：`快速`配置一个节点间`不可拖拽连线`、`不可移动`节点用作静态绘制`拓扑`关系的图
@@ -213,12 +214,14 @@ container.addNode(node);
 
 #### Core Methods
 
-| 属性               | 类型       | 描述                                                        |
-| :----------------- | :--------- | :---------------------------------------------------------- |
-| `addNode`(node)    | `Function` | _在 Svg 容器中加入节点_                                     |
-| `edgeData`(edge)   | `Function` | _获取节点间连线数据. \<path> 属性 `d` 的值_                 |
-| `deleteNode`(node) | `Function` | _删除节点数据 `(仅删除nodes中的数据，Dom上仍然有实际节点)`_ |
-| `deleteEdge`(edge) | `Function` | _删除路径数据 `(仅删除edges中的数据，Dom上仍然有实际节点)`_ |
+| 属性                                 | 类型       | 描述                                        |
+| :----------------------------------- | :--------- | :------------------------------------------ |
+| `addNode`(node)                      | `Function` | _在 Svg 容器中加入节点_                     |
+| `edgeData`(edge)                     | `Function` | _获取节点间连线数据. \<path> 属性 `d` 的值_ |
+| `deleteNode`(node)                   | `Function` | _删除节点数据并从 SVG 容器中移除节点_       |
+| `deleteEdge`(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_   |
+| `hiddenSvgElement`(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_     |
+| `showSvgElement`(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_     |
 
 ## Class Attributes
 

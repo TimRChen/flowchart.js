@@ -21,9 +21,10 @@ A Tiny svg flowchart.js, Quickly use to solve simple process configuration musts
 
 ![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
-
 ## Advantage
+
 Two configurable modes: link-mode and render-mode.
+
 > link-mode: `Quickly` configure a flow chart for `dragging` and `dropping connections` between nodes
 
 > render-mode: `Quickly` configure a `non-dragable connection` between nodes and a `non-removable` node as a graph for `statically` drawing topological relationships
@@ -215,12 +216,14 @@ link line props.
 
 #### Core Methods
 
-| prop               | type       | desc                                                   |
-| :----------------- | :--------- | :----------------------------------------------------- |
-| `addNode`(node)    | `Function` | _add node in svg container_                            |
-| `edgeData`(edge)   | `Function` | _return link path data. the value of \<path> prop `d`_ |
-| `deleteNode`(node) | `Function` | _delete node `(just delete nodes data)`_               |
-| `deleteEdge`(edge) | `Function` | _delete edge `(just delete edges data)`_               |
+| prop                                 | type       | desc                                                   |
+| :----------------------------------- | :--------- | :----------------------------------------------------- |
+| `addNode`(node)                      | `Function` | _add node in svg container_                            |
+| `edgeData`(edge)                     | `Function` | _return link path data. the value of \<path> prop `d`_ |
+| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_  |
+| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_  |
+| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_ |
+| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_   |
 
 ## Class Attributes
 

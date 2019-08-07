@@ -113,8 +113,13 @@ export default class Core {
             `;
         }
         // diy dot style.
-        const { r = 2, fill = '#000', stroke = '#000', strokeWidth = 2, display = 'unset' } =
-            this.options.linkDot || {};
+        const {
+            r = 2,
+            fill = '#000',
+            stroke = '#000',
+            strokeWidth = 2,
+            display = 'unset',
+        } = this.options.linkDot || {};
         graphStyle.innerText += `
                 .link-dot {
                     r: ${r}px;
@@ -284,7 +289,7 @@ export default class Core {
      * @return {string} path attr 'd' value
      */
     caclPathDragData(mousedownNode, event) {
-        const { offsetX: endX, offsetY: endY } = event;
+        const { x: endX, y: endY } = event;
         const { linkNode } = mousedownNode;
         const dotLink = mousedownNode.dotLink;
         const startX = linkNode[dotLink].x;
@@ -448,46 +453,56 @@ export default class Core {
     }
 
     /**
-     * 删除节点
+     * 删除节点数据并移除路径
      * @argument {SVGGElement} node
      */
     deleteNode(node) {
         const index = this.nodes.findIndex(n => n.id === node.id);
         if (index !== -1) {
             this.nodes.splice(index, 1);
+            this.nodeG.removeChild(node.node);
         }
     }
 
     /**
-     * 删除路径
+     * 删除路径数据并移除路径
      * @argument {SVGPathElement} edge
      */
     deleteEdge(edge) {
         const index = this.edges.findIndex(e => e.id === edge.id);
         if (index !== -1) {
             this.edges.splice(index, 1);
+            this.edgeG.removeChild(edge.edge);
         }
     }
 
     /**
-     * 获取svg JSON数据
+     * 隐藏节点/连接路径
+     * @argument {SVGGElement SVGPathElement} svgElement
+     * @argument {String} type svg元素类型
      */
-    getCoreData() {
-        // const nodes = this.nodes.map(node => {
-        //     const { id, linkNode, style } = node;
-        //     return {
-        //         id,
-        //         linkNode,
-        //         style,
-        //     };
-        // });
-        // const edges = this.edges.map(edge => {
-        //     const { id, lineData, source, target, dotLink, dotEndLink } = edge;
-        //     return { id, lineData, source, target, dotLink, dotEndLink };
-        // });
-        return {
-            nodes: this.nodes,
-            edges: this.edges,
-        };
+    hiddenSvgElement(svgElement, type = 'node') {
+        if (type in svgElement) {
+            Object.assign(svgElement[type].style, { display: 'none' });
+        } else {
+            throw TypeError(
+                `type value must be 'node' or 'edge', '${type}' is not one of them`,
+            );
+        }
+    }
+
+    /**
+     * 显示节点/连接路径
+     * @argument {SVGGElement} svgElement
+     * @argument {String} type svg元素类型
+     */
+    showSvgElement(svgElement, type = 'node') {
+        if (type in svgElement) {
+            Object.assign(svgElement[type].style, { display: 'unset' });
+        } else {
+            throw TypeError(
+                `type value must be 'node' or 'edge', '${type}' is not one of them`,
+            );
+        }
     }
 }

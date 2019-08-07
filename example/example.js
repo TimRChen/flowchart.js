@@ -9,6 +9,10 @@ const container = new Core(svgContainer, {
         border: '1px dashed #000',
     },
     line: {
+        style: {
+            stroke: '#000',
+            strokeWidth: '1px',
+        },
         arrow: {
             style: {
                 fill: '#888',
@@ -18,9 +22,9 @@ const container = new Core(svgContainer, {
     },
     linkDot: {
         // limit 4 props.
-        display: 'none',
+        // display: 'none',
     },
-    control: false, // must need. default is false 是否可配置流程
+    control: true, // must need. default is false 是否可配置流程
 });
 
 // 从这里开始是业务逻辑.
@@ -120,7 +124,7 @@ const edge1 = new Edge(blueLineStyle);
 const edge2 = new Edge(blueLineStyle);
 const edge3 = new Edge(redLineStyle);
 
-// source target relationship point to nodes relationship.
+// source target relationship point torelationship.
 Object.assign(edge1, {
     source: mainNode.id,
     target: childNode1.id,
@@ -157,30 +161,28 @@ container.edgeG.appendChild(edge3.edge);
 const bottomDecrease = document.querySelector('.bottom.main-node-decrease');
 let clickFlag = false;
 bottomDecrease.onclick = function controlClo () {
-    const { nodes, edges } = container;
+    const { edges } = container;
     if (!clickFlag) {
         // close
         clickFlag = true;
-        const closeStyle = { display: 'none' };
-        Object.assign(childNode1.node.style, closeStyle);
-        Object.assign(childNode2.node.style, closeStyle);
+        container.hiddenSvgElement(childNode1, 'node');
+        container.hiddenSvgElement(childNode2, 'node');
         const cNode1Line = edges.find(edge => edge.target === childNode1.id);
         const cNode2Line = edges.find(edge => edge.target === childNode2.id);
         if (cNode1Line && cNode2Line) {
-            Object.assign(cNode1Line.edge.style, closeStyle);
-            Object.assign(cNode2Line.edge.style, closeStyle);
+            container.hiddenSvgElement(cNode1Line, 'edge');
+            container.hiddenSvgElement(cNode2Line, 'edge');
         }
     } else {
         // open
         clickFlag = false;
-        const openStyle = { display: 'unset' };
-        Object.assign(childNode1.node.style, openStyle);
-        Object.assign(childNode2.node.style, openStyle);
+        container.showSvgElement(childNode1, 'node');
+        container.showSvgElement(childNode2, 'node');
         const cNode1Line = edges.find(edge => edge.target === childNode1.id);
         const cNode2Line = edges.find(edge => edge.target === childNode2.id);
         if (cNode1Line && cNode2Line) {
-            Object.assign(cNode1Line.edge.style, openStyle);
-            Object.assign(cNode2Line.edge.style, openStyle);
+            container.showSvgElement(cNode1Line, 'edge');
+            container.showSvgElement(cNode2Line, 'edge');
         }
     }
 };
