@@ -22,7 +22,7 @@ const container = new Core(svgContainer, {
     },
     linkDot: {
         // limit 4 props.
-        // display: 'none',
+        display: 'none',
     },
     control: true, // must need. default is false 是否可配置流程
 });
