@@ -1,6 +1,6 @@
 {
   "name": "flowchart-core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "tiny flowchart-js lib",
   "main": "dist/flowchart-core.min.js",
   "scripts": {
