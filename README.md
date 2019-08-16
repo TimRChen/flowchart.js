@@ -216,20 +216,34 @@ link line props.
 
 #### Core Methods
 
-| prop                                 | type       | desc                                                   |
-| :----------------------------------- | :--------- | :----------------------------------------------------- |
-| `addNode`(node)                      | `Function` | _add node in svg container_                            |
-| `edgeData`(edge)                     | `Function` | _return link path data. the value of \<path> prop `d`_ |
-| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_  |
-| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_  |
-| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_ |
-| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_   |
+| prop                                 | type       | desc                                                                                                                                               |
+| :----------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addNode`(node)                      | `Function` | _add node to svg container_                                                                                                                        |
+| `addEdge`(edge, config)              | `Function` | \_add a path to svg container to describe the relationship between nodes, just use in render mode, `config: { source, target, dotLink, dotEndLink }` |
+| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_                                                                                              |
+| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                              |
+| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                               |
+| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                             |
 
 #### Node Methods
 
-| prop                       | type       | desc                                                                                  |
-| :------------------------- | :--------- | :------------------------------------------------------------------------------------ |
+| prop                       | type       | desc                                                                                    |
+| :------------------------- | :--------- | :-------------------------------------------------------------------------------------- |
 | `changePosition`(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
+
+#### Usage:
+
+```js
+// eg. how to appendChild a edge in core instance.
+const coreInstance = new Core(svgContainer, { ... });
+const edgeInstance = new Edge({ ... });
+coreInstance.addEdge(edgeInstance, {
+    source: sourceNode.id,
+    target: targetNode.id,
+    dotLink: 'bottom',
+    dotEndLink: 'top'
+});
+```
 
 ## Class Attributes
 
@@ -247,15 +261,6 @@ link line props.
     | nodeG        | `SvgElement<g>`   | _\<g> tag. nodes container_ |
     | edgeG        | `SvgElement<g>`   | _\<g> tag. edges container_ |
 
--   #### Usage:
-
-    ```js
-    // eg. how to appendChild a edge in core instance.
-    const coreInstance = new Core(svgContainer, { ... });
-    const edgeInstance = new Edge({ ... });
-    coreInstance.edgeG.appendChild(edgeInstance.edge);
-    ```
-
 ### `Node`
 
 -   #### Arguments:
@@ -271,6 +276,7 @@ link line props.
 
     ```js
     // eg. how to make a node instance visible or hidden.
+    const coreInstance = new Core(svgContainer, { ... });
     const nodeInstance = new Node({
         position: {
             x: 100,
@@ -281,10 +287,11 @@ link line props.
             height,
         },
     });
+    const operatorType = 'node';
     // hidden.
-    Object.assign(nodeInstance.node.style, { display: 'none' });
+    coreInstance.hiddenSvgElement(nodeInstance, operatorType);
     // visible.
-    Object.assign(nodeInstance.node.style, { display: 'initial' });
+    coreInstance.showSvgElement(nodeInstance, operatorType);
     ```
 
 ### `Edge`
@@ -311,15 +318,13 @@ link line props.
             stroke: 'deepskyblue',
         },
     });
-    Object.assign(edgeInstance, {
-        source: xNodeInstance.id,
-        target: xxNodeInstance.id,
-        dotLink: 'bottom',
-        dotEndLink: 'top',
-    });
     // key step.
-    edgeInstance.lineData = coreInstance.edgeData(edgeInstance);
-    coreInstance.edgeG.appendChild(edgeInstance.edge);
+    coreInstance.addEdge(edgeInstance, {
+        source: sourceNode.id,
+        target: targetNode.id,
+        dotLink: 'bottom',
+        dotEndLink: 'top'
+    });
     ```
 
 ## Example

@@ -142,8 +142,8 @@ export default class Core {
     bindMouseEvent(container) {
         if ('control' in this.options && this.options.control) {
             // 用户设置为可控制时，绑定相关事件
-            container.onmousemove = this.svgMouseMove.bind(this);
-            container.onmouseup = this.svgMouseUp.bind(this);
+            container.onmousemove = this.handleSvgMouseMove.bind(this);
+            container.onmouseup = this.handleSvgMouseUp.bind(this);
         }
     }
 
@@ -152,7 +152,7 @@ export default class Core {
      * @description 核心方法 - 处理连线轨迹 - 更新节点拖拽变化值
      * @argument {MouseEvent} event - mouse event
      */
-    svgMouseMove(event) {
+    handleSvgMouseMove(event) {
         // 拖拽节点
         this.handleDragNode(event);
         // 连接节点
@@ -163,7 +163,7 @@ export default class Core {
      * 全局SVG mouse up handle.
      * @description 核心方法 - 处理连线轨迹 - 更新节点拖拽变化值
      */
-    svgMouseUp() {
+    handleSvgMouseUp() {
         // 处理连接至另一节点，即连接完毕
         this.handleLinkNodeOver();
         // 连线后初始化相关变量
@@ -450,6 +450,17 @@ export default class Core {
     addNode(node) {
         this.nodes.push(node);
         this.nodeG.appendChild(node.node);
+    }
+
+    /**
+     * 增加路径
+     * @argument {SVGPathElement} edge
+     */
+    addEdge(edge, config = {}) {
+        Object.assign(edge, config);
+        edge.lineData = this.edgeData(edge);
+        this.edges.push(edge);
+        this.edgeG.appendChild(edge.edge);
     }
 
     /**

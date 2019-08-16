@@ -214,14 +214,28 @@ container.addNode(node);
 
 #### Core Methods
 
-| 属性                                 | 类型       | 描述                                        |
-| :----------------------------------- | :--------- | :------------------------------------------ |
-| `addNode`(node)                      | `Function` | _在 Svg 容器中加入节点_                     |
-| `edgeData`(edge)                     | `Function` | _获取节点间连线数据. \<path> 属性 `d` 的值_ |
-| `deleteNode`(node)                   | `Function` | _删除节点数据并从 SVG 容器中移除节点_       |
-| `deleteEdge`(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_   |
-| `hiddenSvgElement`(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_     |
-| `showSvgElement`(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_     |
+| 属性                                 | 类型       | 描述                                                                                                                                  |
+| :----------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `addNode`(node)                      | `Function` | _在 Svg 容器中加入节点_                                                                                                               |
+| `addEdge`(edge, config)              | `Function` | \_在 Svg 容器中加入路径，用以描述节点之间关系。必需传路径配置项，仅在渲染模式中使用 `config: { source, target, dotLink, dotEndLink }` |
+| `deleteNode`(node)                   | `Function` | _删除节点数据并从 SVG 容器中移除节点_                                                                                                 |
+| `deleteEdge`(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_                                                                                             |
+| `showSvgElement`(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
+| `hiddenSvgElement`(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
+
+#### Usage:
+
+```js
+// eg. 如何在core实例中插入一条线.
+const coreInstance = new Core(svgContainer, { ... });
+const edgeInstance = new Edge({ ... });
+coreInstance.addEdge(edgeInstance, {
+    source: sourceNode.id,
+    target: targetNode.id,
+    dotLink: 'bottom',
+    dotEndLink: 'top'
+});
+```
 
 #### Node Methods
 
@@ -245,22 +259,13 @@ container.addNode(node);
     | nodeG        | `SvgElement<g>`   | _\<g> tag. nodes 的容器_ |
     | edgeG        | `SvgElement<g>`   | _\<g> tag. edges 的容器_ |
 
--   #### Usage:
-
-    ```js
-    // eg. 如何在core实例中插入一条线.
-    const coreInstance = new Core(svgContainer, { ... });
-    const edgeInstance = new Edge({ ... });
-    coreInstance.edgeG.appendChild(edgeInstance.edge);
-    ```
-
 ### `Node`
 
 -   #### 参数:
 
 | 属性  | 类型             | 描述                                                            |
 | :---- | :--------------- | :-------------------------------------------------------------- |
-| id    | `Number`         | _unique node id_                                                |
+| id    | `String`         | _unique node id_                                                |
 | node  | `SvgElement<g>`  | _节点容器 \<g>. 作为 Dom 节点使用. `可访问它上的所有dom属性值`_ |
 | html  | `String`         | _`html 元素嵌入` 在节点内部_                                    |
 | style | `css stylesheet` | _节点容器样式_                                                  |
@@ -269,6 +274,7 @@ container.addNode(node);
 
     ```js
     // eg. 如何使得一个节点实例显示或隐藏.
+    const coreInstance = new Core(svgContainer, { ... });
     const nodeInstance = new Node({
         position: {
             x: 100,
@@ -279,10 +285,11 @@ container.addNode(node);
             height,
         },
     });
+    const operatorType = 'node';
     // 隐藏.
-    Object.assign(nodeInstance.node.style, { display: 'none' });
+    coreInstance.hiddenSvgElement(nodeInstance, operatorType);
     // 显示.
-    Object.assign(nodeInstance.node.style, { display: 'initial' });
+    coreInstance.showSvgElement(nodeInstance, operatorType);
     ```
 
 ### `Edge`
@@ -291,10 +298,10 @@ container.addNode(node);
 
     | 属性       | 类型            | 描述                                               |
     | :--------- | :-------------- | :------------------------------------------------- |
-    | id         | `Number`        | _unique edge id_                                   |
+    | id         | `String`        | _unique edge id_                                   |
     | edge       | `SvgElement<g>` | _edge 容器 \<g>_                                   |
-    | source     | `Number`        | _连接源节点 ID_                                    |
-    | target     | `Number`        | _连接目标节点 ID_                                  |
+    | source     | `String`        | _连接源节点 ID_                                    |
+    | target     | `String`        | _连接目标节点 ID_                                  |
     | dotLink    | `String`        | 连接点起始位置: top \| bottom\| left \| right      |
     | dotEndLink | `String`        | 连接点终止连接位置: top \| bottom \| left \| right |
     | lineData   | `String`        | _连接路径数据， \<path> 属性 `d`_                  |
@@ -309,15 +316,13 @@ container.addNode(node);
             stroke: 'deepskyblue',
         },
     });
-    Object.assign(edgeInstance, {
-        source: xNodeInstance.id,
-        target: xxNodeInstance.id,
-        dotLink: 'bottom',
-        dotEndLink: 'top',
-    });
     // 关键步骤.
-    edgeInstance.lineData = coreInstance.edgeData(edgeInstance);
-    coreInstance.edgeG.appendChild(edgeInstance.edge);
+    coreInstance.addEdge(edgeInstance, {
+        source: sourceNode.id,
+        target: targetNode.id,
+        dotLink: 'bottom',
+        dotEndLink: 'top'
+    });
     ```
 
 ## Example
