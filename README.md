@@ -56,7 +56,7 @@ const container = new Core(svgContainer, {
         height: 600,
         border: '1px dashed #000',
     },
-    control: true,
+    mode: 'link-mode',
     // ..
 });
 // define node container width & height.
@@ -92,16 +92,16 @@ container.addNode(node);
 
 #### `coreOptions`
 
--   #### Type: `{ style: {}, line: {}, linkDot: {}, control: false }`
+-   #### Type: `{ style: {}, line: {}, linkDot: {}, mode: 'render-mode' }`
 
 -   #### Arguments:
 
-    | prop    | type                                      | desc                                   | must |
-    | :------ | :---------------------------------------- | :------------------------------------- | :--- |
-    | style   | `stylesheet`                              | _css style_                            | `1`  |
-    | line    | [`lineObject`](#line-lineobject)          | _link path config_                     | `0`  |
-    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _link dot config_                      | `0`  |
-    | control | `Boolean`                                 | _(true)link-mode. (false)render-mode._ | `1`  |
+    | prop    | type                                      | desc                      | must |
+    | :------ | :---------------------------------------- | :------------------------ | :--- |
+    | style   | `stylesheet`                              | _css style_               | `1`  |
+    | line    | [`lineObject`](#line-lineobject)          | _link path config_        | `0`  |
+    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _link dot config_         | `0`  |
+    | mode    | `String`                                  | _link-mode. render-mode._ | `1`  |
 
 -   #### Usage:
 
@@ -216,20 +216,14 @@ link line props.
 
 #### Core Methods
 
-| prop                                 | type       | desc                                                                                                                                               |
-| :----------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `addNode`(node)                      | `Function` | _add node to svg container_                                                                                                                        |
+| prop                                 | type       | desc                                                                                                                                                 |
+| :----------------------------------- | :--------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addNode`(node)                      | `Function` | _add node to svg container_                                                                                                                          |
 | `addEdge`(edge, config)              | `Function` | \_add a path to svg container to describe the relationship between nodes, just use in render mode, `config: { source, target, dotLink, dotEndLink }` |
-| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_                                                                                              |
-| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                              |
-| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                               |
-| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                             |
-
-#### Node Methods
-
-| prop                       | type       | desc                                                                                    |
-| :------------------------- | :--------- | :-------------------------------------------------------------------------------------- |
-| `changePosition`(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
+| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_                                                                                                |
+| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                                |
+| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                                 |
+| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                               |
 
 #### Usage:
 
@@ -242,6 +236,24 @@ coreInstance.addEdge(edgeInstance, {
     target: targetNode.id,
     dotLink: 'bottom',
     dotEndLink: 'top'
+});
+```
+
+#### Node Methods
+
+| prop                       | type       | desc                                                                                    |
+| :------------------------- | :--------- | :-------------------------------------------------------------------------------------- |
+| `changePosition`(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
+
+#### Usage:
+
+```js
+// eg. how to change the position attribute.
+const coreInstance = new Core(svgContainer, { ... });
+const nodeInstance = new Node({ ... });
+nodeInstance.changePosition({
+    x: 130,
+    y: 100,
 });
 ```
 
@@ -360,7 +372,7 @@ const container = new Core(svgContainer, {
         stroke: 'deepskyblue',
         strokeWidth: 2,
     },
-    control: false,
+    mode: 'render-mode',
 });
 
 const width = 202;

@@ -24,7 +24,7 @@ const container = new Core(svgContainer, {
         // limit 4 props.
         display: 'none',
     },
-    control: true, // must need. default is false 是否可配置流程
+    mode: 'link-mode', // must need. default is false 是否可配置流程
 });
 
 // 从这里开始是业务逻辑.
@@ -42,8 +42,8 @@ const height = 170;
 
 const mainNode = new Node({
     position: {
-        x: 100,
-        y: 150,
+        x: 50,
+        y: 50,
     },
     style: {
         width,
@@ -105,6 +105,18 @@ container.addNode(childNode1);
 container.addNode(childNode2);
 container.addNode(parentNode);
 
+// 改变node的位置
+mainNode.changePosition({
+    x: 100,
+    y: 150,
+});
+// this equal to.
+// mainNode.position = {
+//     x: 300,
+//     y: 100,
+// }
+
+
 // 创建连接线.
 
 const blueLineStyle = {
@@ -124,43 +136,30 @@ const edge1 = new Edge(blueLineStyle);
 const edge2 = new Edge(blueLineStyle);
 const edge3 = new Edge(redLineStyle);
 
-// source target relationship point torelationship.
-Object.assign(edge1, {
+container.addEdge(edge1, {
     source: mainNode.id,
     target: childNode1.id,
     dotLink: 'bottom',
-    dotEndLink: 'top'
+    dotEndLink: 'top',
 });
-
-Object.assign(edge2, {
+container.addEdge(edge2, {
     source: mainNode.id,
     target: childNode2.id,
     dotLink: 'bottom',
-    dotEndLink: 'top'
+    dotEndLink: 'top',
 });
-
-Object.assign(edge3, {
+container.addEdge(edge3, {
     source: mainNode.id,
     target: parentNode.id,
     dotLink: 'right',
-    dotEndLink: 'left'
+    dotEndLink: 'left',
 });
 
-// line data.
-edge1.lineData = container.edgeData(edge1);
-edge2.lineData = container.edgeData(edge2);
-edge3.lineData = container.edgeData(edge3);
-
-// edges push & insert in the edgeG Dom.
-container.edges = [edge1, edge2, edge3, ...container.edges];
-container.edgeG.appendChild(edge1.edge);
-container.edgeG.appendChild(edge2.edge);
-container.edgeG.appendChild(edge3.edge);
 
 // 收展节点.
 const bottomDecrease = document.querySelector('.bottom.main-node-decrease');
 let clickFlag = false;
-bottomDecrease.onclick = function controlClo () {
+bottomDecrease.onclick = function controlClo() {
     const { edges } = container;
     if (!clickFlag) {
         // close

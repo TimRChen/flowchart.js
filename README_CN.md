@@ -54,8 +54,7 @@ const container = new Core(svgContainer, {
         height: 600,
         border: '1px dashed #000',
     },
-    control: true,
-    // ..
+    mode: 'link-mode',
 });
 // 定义 node container 宽 和 高.
 const width = 140;
@@ -90,16 +89,16 @@ container.addNode(node);
 
 #### `coreOptions`
 
--   #### 类型: `{ style: {}, line: {}, linkDot: {}, control: false }`
+-   #### 类型: `{ style: {}, line: {}, linkDot: {}, mode: 'render-mode' }`
 
 -   #### 参数:
 
-    | 属性    | 类型                                      | 描述                               | 必须 |
-    | :------ | :---------------------------------------- | :--------------------------------- | :--- |
-    | style   | `stylesheet`                              | _css 样式_                         | `1`  |
-    | line    | [`lineObject`](#line-lineobject)          | _连接路径配置_                     | `0`  |
-    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _连接点配置_                       | `0`  |
-    | control | `Boolean`                                 | _(true)连接模式. (false)渲染模式._ | `1`  |
+    | 属性    | 类型                                      | 描述                                          | 必须 |
+    | :------ | :---------------------------------------- | :-------------------------------------------- | :--- |
+    | style   | `stylesheet`                              | _css 样式_                                    | `1`  |
+    | line    | [`lineObject`](#line-lineobject)          | _连接路径配置_                                | `0`  |
+    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _连接点配置_                                  | `0`  |
+    | mode    | `String`                                  | _(link-mode)连接模式. (render-mode)渲染模式._ | `1`  |
 
 -   #### Usage:
 
@@ -243,6 +242,18 @@ coreInstance.addEdge(edgeInstance, {
 | :------------------------- | :--------- | :---------------------------------------------------------------------------- |
 | `changePosition`(position) | `Function` | _更改 `position` 属性值，传入 [`positionObject`](#nodeconfig-positionobject)_ |
 
+#### Usage:
+
+```js
+// eg. 如何在创建node后，动态改变其position
+const coreInstance = new Core(svgContainer, { ... });
+const nodeInstance = new Node({ ... });
+nodeInstance.changePosition({
+    x: 130,
+    y: 100,
+});
+```
+
 ## Class Attributes
 
 > 通过这些暴露参数可以获得`更复杂的效果`
@@ -358,7 +369,7 @@ const container = new Core(svgContainer, {
         stroke: 'deepskyblue',
         strokeWidth: 2,
     },
-    control: false,
+    mode: 'render-mode',
 });
 
 const width = 202;
