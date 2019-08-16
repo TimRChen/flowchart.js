@@ -102,7 +102,7 @@ export default class Core {
         const graphStyle = document.createElement('style');
         graphStyle.setAttribute('class', 'flowchart-core-style');
         const head = document.querySelector('head');
-        if ('control' in this.options && this.options.control) {
+        if ('mode' in this.options && this.options.mode === 'link-mode') {
             // 用户设置为可控制时，连接点展示连接效果
             graphStyle.innerText = `
                 .link-dot:hover {
@@ -140,7 +140,7 @@ export default class Core {
      * @argument {SVGElement} container
      */
     bindMouseEvent(container) {
-        if ('control' in this.options && this.options.control) {
+        if ('mode' in this.options && this.options.mode === 'link-mode') {
             // 用户设置为可控制时，绑定相关事件
             container.onmousemove = this.handleSvgMouseMove.bind(this);
             container.onmouseup = this.handleSvgMouseUp.bind(this);
