@@ -1,4 +1,4 @@
-import { getRandomInt, creatSvgElement } from '../utils/tools.js';
+import { getRandomStr, creatSvgElement } from '../utils/tools.js';
 
 /**
  * flowchart核心库
@@ -8,7 +8,7 @@ import { getRandomInt, creatSvgElement } from '../utils/tools.js';
 export default class Edge {
     constructor(options = {}) {
         // initial class property.
-        this.id = getRandomInt();
+        this.id = getRandomStr();
         this.source = 0;
         this.target = 0;
         this.lineData = ''; // 路径数据，path属性d对应value值

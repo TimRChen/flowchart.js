@@ -1,4 +1,4 @@
-import { getRandomInt, creatSvgElement } from '../utils/tools.js';
+import { getRandomStr, creatSvgElement } from '../utils/tools.js';
 
 /**
  * flowchart核心库
@@ -17,7 +17,6 @@ export default class Node {
         };
 
         // initial class property.
-        this.id = getRandomInt();
         this.node = {};
         this.html = html;
         this.style = Object.assign(defaultStyle, style);
@@ -38,12 +37,26 @@ export default class Node {
         if ('position' in config) {
             // position属性值可追溯
             let { position } = config;
-            Object.defineProperty(this, 'position', {
-                enumerable: true,
-                get: () => position,
-                set: value => {
-                    position = value;
-                    this.handlePositionChange(value);
+            let id = getRandomStr();
+            Object.defineProperties(this, {
+                position: {
+                    enumerable: true,
+                    get: () => position,
+                    set: value => {
+                        position = value;
+                        this.handlePositionChange(value);
+                    },
+                },
+                id: {
+                    enumerable: true,
+                    get: () => id,
+                    set: value => {
+                        if (typeof value !== 'string') {
+                            throw TypeError(`${value} is not a string`);
+                        } else {
+                            id = value;
+                        }
+                    },
                 },
             });
         } else {
