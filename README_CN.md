@@ -223,6 +223,12 @@ container.addNode(node);
 | `hiddenSvgElement`(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_     |
 | `showSvgElement`(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_     |
 
+#### Node Methods
+
+| prop                       | type       | desc                                                                          |
+| :------------------------- | :--------- | :---------------------------------------------------------------------------- |
+| `changePosition`(position) | `Function` | _更改 `position` 属性值，传入 [`positionObject`](#nodeconfig-positionobject)_ |
+
 ## Class Attributes
 
 > 通过这些暴露参数可以获得`更复杂的效果`

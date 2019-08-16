@@ -27,7 +27,6 @@ export default class Node {
         this.linkActive = false; // 此对象标记当前连线状态
         this.linkNode = {}; // 此对象标记每个连接点的位置
         this.watchProperty(config);
-
         this.initializeNode();
     }
 
@@ -36,22 +35,44 @@ export default class Node {
      * @argument {Object} config
      */
     watchProperty(config) {
-        let { position } = config;
-        // position属性值可追溯
-        Object.defineProperty(this, 'position', {
-            get: () => position,
-            set: value => {
-                position = value;
-                this.handlePositionChange();
-            },
-        });
+        if ('position' in config) {
+            // position属性值可追溯
+            let { position } = config;
+            Object.defineProperty(this, 'position', {
+                enumerable: true,
+                get: () => position,
+                set: value => {
+                    position = value;
+                    this.handlePositionChange(value);
+                },
+            });
+        } else {
+            throw Error(
+                'There must be have a position attribute in config Object',
+            );
+        }
+    }
+
+    /**
+     * 更改position
+     * @argument {Object} position
+     */
+    changePosition(position) {
+        if ('x' in position || 'y' in position) {
+            this.position = Object.assign({}, this.position, position);
+        } else {
+            throw Error(
+                'There must be have x or y attribute in position Object',
+            );
+        }
     }
 
     /**
      * 位置变更处理
+     * @argument {Object} position
      */
-    handlePositionChange() {
-        const { x, y } = this.position;
+    handlePositionChange(position) {
+        const { x, y } = position;
         this.node.style.transform = `translate(${x}px, ${y}px)`;
         // 位置变更更新连线数据
         this.initialLinkNodeData();
@@ -65,7 +86,6 @@ export default class Node {
         const { x, y } = this.position;
         const midX = x + rectWidth / 2;
         const midY = y + rectHeight / 2;
-        // console.log(this.position);
 
         this.linkNode = {
             top: {

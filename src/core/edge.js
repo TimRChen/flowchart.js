@@ -30,6 +30,7 @@ export default class Edge {
         let lineData = '';
         // lineDragData属性值可追溯
         Object.defineProperty(this, 'lineData', {
+            enumerable: true,
             get: () => lineData,
             set: value => {
                 lineData = value;

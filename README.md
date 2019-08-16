@@ -225,6 +225,12 @@ link line props.
 | `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_ |
 | `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_   |
 
+#### Node Methods
+
+| prop                       | type       | desc                                                                                  |
+| :------------------------- | :--------- | :------------------------------------------------------------------------------------ |
+| `changePosition`(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
+
 ## Class Attributes
 
 > More `complex effects` can be achieved through these exposure methods.

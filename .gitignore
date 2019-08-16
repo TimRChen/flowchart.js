@@ -2,4 +2,5 @@
 node_modules
 dist/example*
 dist/index.html
+dist/index.js
 dist/index.js.map
