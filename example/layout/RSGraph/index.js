@@ -30,28 +30,28 @@ nodes.forEach(node => {
 const config = {
     data: nodes,
     // 可选
-    // zoom: true,
-    // coreOptions: {
-    //     style: {
-    //         borderTop: '1px dashed #000',
-    //         overflow: 'scroll',
-    //     },
-    //     line: {
-    //         style: {
-    //             stroke: 'deepskyblue',
-    //         },
-    //         arrow: {
-    //             style: {
-    //                 fill: '#888',
-    //             },
-    //             viewBox: '0 0 18 18',
-    //         },
-    //     },
-    //     linkDot: {
-    //         display: 'none',
-    //     },
-    //     mode: 'link-mode', // set link-mode will not work.
-    // },
+    zoom: true,
+    coreOptions: {
+        style: {
+            borderTop: '1px dashed #000',
+            overflow: 'scroll',
+        },
+        line: {
+            style: {
+                stroke: 'deepskyblue',
+            },
+            arrow: {
+                style: {
+                    fill: '#888',
+                },
+                viewBox: '0 0 18 18',
+            },
+        },
+        linkDot: {
+            display: 'none',
+        },
+        mode: 'link-mode', // set link-mode will not work.
+    },
 };
 
 // create rsgraph instance, just use one statement.

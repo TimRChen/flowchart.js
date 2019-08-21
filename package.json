@@ -18,5 +18,9 @@
   "dependencies": {
     "d3-selection": "^1.4.0",
     "d3-zoom": "^1.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimRChen/flowchart-core.git"
   }
 }

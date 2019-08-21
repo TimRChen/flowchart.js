@@ -9,23 +9,15 @@
 
 # flowchart-core
 
-小巧、精悍的 svg 库，可用于快速解决多样复杂的流程配置需求。
-
--   样例：自定义节点内容
-
-![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
-
--   样例：流程配置
-
-![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
+小巧、精悍的 svg 库，可用于快速绘制多样复杂的流程配置和关系拓扑图。
 
 ## 特点
 
 可配置两种模式：连接模式&渲染模式
 
-> 连接模式：`快速`配置一个节点间`可拖拽连接`、`移动`节点的流程图
+> 连接模式：`快速`开始流程图配置
 
-> 渲染模式：`快速`配置一个节点间`不可拖拽连线`、`不可移动`节点用作静态绘制`拓扑`关系的图
+> 渲染模式：`快速`绘制拓扑关系图
 
 ## Install
 
@@ -34,6 +26,31 @@
 ```bash
  $ npm install flowchart-core
 ```
+
+#### Yarn
+
+```bash
+ $ yarn flowchart-core
+```
+
+## Layout
+
+### Topology
+
+#### [查看 Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/)
+
+#### [查看示例代码](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
+
+```js
+// create topology graph, just use one statement.
+const graph = new RSGraph('#svg-container', {
+    data: nodes,
+});
+```
+
+### Flowchart
+
+#### [查看 Demo](https://timrchen.github.io/flowchart-vue/dist/index.html)
 
 ## Mount
 
@@ -80,25 +97,54 @@ container.addNode(node);
 
 ## API Reference
 
-### `new Core(svgElement, options)`
+### new Core(svgElement, options)
 
 | 属性       | 类型                          | 描述            | 必须 |
 | :--------- | :---------------------------- | :-------------- | :--- |
-| svgElement | `SvgElement<svg>`             | _Svg DOM 元素_  | `1`  |
-| options    | [`coreOptions`](#coreoptions) | _core 配置选项_ | `1`  |
+| svgElement | `SvgElement<svg>`             | _Svg DOM 元素_  | 1    |
+| options    | [`coreOptions`](#coreoptions) | _core 配置选项_ | 1    |
 
-#### `coreOptions`
+#### coreOptions
 
--   #### 类型: `{ style: {}, line: {}, linkDot: {}, mode: 'render-mode' }`
+-   #### 类型: { style: {}, line: {}, linkDot: {}, mode: 'render-mode' }
 
 -   #### 参数:
 
-    | 属性    | 类型                                      | 描述                                          | 必须 |
-    | :------ | :---------------------------------------- | :-------------------------------------------- | :--- |
-    | style   | `stylesheet`                              | _css 样式_                                    | `1`  |
-    | line    | [`lineObject`](#line-lineobject)          | _连接路径配置_                                | `0`  |
-    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _连接点配置_                                  | `0`  |
-    | mode    | `String`                                  | _(link-mode)连接模式. (render-mode)渲染模式._ | `1`  |
+    | 属性    | 类型                            | 描述                                          | 必须 |
+    | :------ | :------------------------------ | :-------------------------------------------- | :--- |
+    | style   | stylesheet                      | _css 样式_                                    | 1    |
+    | line    | [lineObject](#lineobject)       | _连接路径配置_                                | 0    |
+    | linkDot | [linkDotObject](#linkdotobject) | _连接点配置_                                  | 0    |
+    | mode    | `String`                        | _(link-mode)连接模式. (render-mode)渲染模式._ | 1    |
+
+    ##### lineObject
+
+    连接路径对象.
+
+    | 属性  | 类型                        | 描述             | 必须 |
+    | :---- | :-------------------------- | :--------------- | :--- |
+    | style | stylesheet                  | _css 样式_       | 0    |
+    | arrow | [arrowObject](#arrowObject) | _连接线箭头样式_ | 0    |
+
+    ##### linkDotObject
+
+    > ##### 目前 `仅` 可以使用下表中的样式
+
+    | 属性        | 类型         | 描述                        | 必须 |
+    | :---------- | :----------- | :-------------------------- | :--- |
+    | r           | radius       | \<circle> _属性 `r` 半径值_ | 0    |
+    | fill        | fill color   | _色值_                      | 0    |
+    | stroke      | stroke color | _色值_                      | 0    |
+    | strokeWidth | stroke width | _像素宽_                    | 0    |
+    | display     | css display  | _display 值_                | 0    |
+
+
+    ##### arrowObject
+
+    | 属性    | 类型         | 描述                                                                                | 必须 |
+    | :------ | :----------- | :---------------------------------------------------------------------------------- | :--- |
+    | style   | `stylesheet` | _css 样式_                                                                          | 0    |
+    | viewBox | `String`     | _[svg viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)_ | 0    |
 
 -   #### Usage:
 
@@ -130,54 +176,37 @@ container.addNode(node);
     };
     ```
 
-##### _line_: `lineObject`
+### new Node(config)
 
-连接路径对象.
+| 属性   | 类型       | 描述       | 必须 |
+| :----- | :--------- | :--------- | :--- |
+| config | nodeConfig | `节点配置` | 1    |
 
-| 属性  | 类型                                | 描述             | 必须 |
-| :---- | :---------------------------------- | :--------------- | :--- |
-| style | `stylesheet`                        | _css 样式_       | `0`  |
-| arrow | [`arrowObject`](#arrow-arrowobject) | _连接线箭头样式_ | `0`  |
+#### nodeConfig
 
-##### _line_->_arrow_: `arrowObject`
-
-| 属性    | 类型         | 描述                                                                                | 必须 |
-| :------ | :----------- | :---------------------------------------------------------------------------------- | :--- |
-| style   | `stylesheet` | _css 样式_                                                                          | `0`  |
-| viewBox | `String`     | _[svg viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)_ | `0`  |
-
-##### _linkDot_: `linkDotObject`
-
-> ##### 目前 `仅` 可以使用下表中的样式
-
-| 属性        | 类型           | 描述                        | 必须 |
-| :---------- | :------------- | :-------------------------- | :--- |
-| r           | `radius`       | \<circle> _属性 `r` 半径值_ | `0`  |
-| fill        | `fill color`   | _色值_                      | `0`  |
-| stroke      | `stroke color` | _色值_                      | `0`  |
-| strokeWidth | `stroke width` | _像素宽_                    | `0`  |
-| display     | `css display`  | _display 值_                | `0`  |
-
----
-
-### `new Node(config)`
-
-| 属性   | 类型         | 描述       | 必须 |
-| :----- | :----------- | :--------- | :--- |
-| config | `nodeConfig` | `节点配置` | `1`  |
-
-#### `nodeConfig`
-
--   #### 类型: `{ style: {}, position: { x, y }, html: { meta } }`
+-   #### 类型: { style: {}, position: { x, y }, html: { meta } }
 -   #### 参数:
 
-    | 属性     | 类型                                           | 描述                      | 必须 |
-    | :------- | :--------------------------------------------- | :------------------------ | :--- |
-    | style    | `stylesheet`                                   | _css 样式_                | `1`  |
-    | position | [`positionObject`](#nodeconfig-positionobject) | _节点在 Svg 容器中的位置_ | `1`  |
-    | html     | [`htmlObject`](#nodeconfig-htmlobject)         | _html 元素_               | `1`  |
+    | 属性     | 类型                              | 描述                      | 必须 |
+    | :------- | :-------------------------------- | :------------------------ | :--- |
+    | style    | stylesheet                        | _css 样式_                | 1    |
+    | position | [positionObject](#positionObject) | _节点在 Svg 容器中的位置_ | 1    |
+    | html     | [htmlObject](#htmlobject)         | _html 元素_               | 1    |
 
--   #### Usage:
+    ##### positionObject
+
+    | 属性 | 类型     | 描述                                                                                        | 必须 |
+    | :--- | :------- | :------------------------------------------------------------------------------------------ | :--- |
+    | x    | `x axis` | _[MouseEvent.clientX](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientX)_ | 1    |
+    | y    | `y axis` | _[MouseEvent.clientY](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientY)_ | 1    |
+
+    ##### htmlObject
+
+    | 属性 | 类型          | 描述        | 必须 |
+    | :--- | :------------ | :---------- | :--- |
+    | meta | `DomInstance` | _html 元素_ | 1    |
+
+*   #### Usage:
 
     ```js
     const config = {
@@ -196,31 +225,80 @@ container.addNode(node);
     };
     ```
 
-##### _nodeConfig_: `positionObject`
+### new Edge(config)
 
-| 属性 | 类型     | 描述                                                                                        | 必须 |
-| :--- | :------- | :------------------------------------------------------------------------------------------ | :--- |
-| x    | `x axis` | _[MouseEvent.clientX](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientX)_ | `1`  |
-| y    | `y axis` | _[MouseEvent.clientY](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientY)_ | `1`  |
+| prop   | type       | desc          | must |
+| :----- | :--------- | :------------ | :--- |
+| config | edgeConfig | `edge config` | 0    |
 
-##### _nodeConfig_: `htmlObject`
+#### edgeConfig
 
-| 属性 | 类型          | 描述        | 必须 |
-| :--- | :------------ | :---------- | :--- |
-| meta | `DomInstance` | _html 元素_ | `1`  |
+-   #### 类型: { style: {} }
+-   #### 参数:
+
+    | prop  | type         | desc        | must |
+    | :---- | :----------- | :---------- | :--- |
+    | style | `stylesheet` | _css style_ | 1    |
+
+*   #### Usage:
+
+    ```js
+    const config = {
+        style: {
+            stroke: 'deepskyblue',
+        },
+    };
+    ```
+
+### new RSGraph(selectors, config)
+
+| prop      | type                                                                            | desc             | must |
+| :-------- | :------------------------------------------------------------------------------ | :--------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | `css 选择字符串` | 0    |
+| config    | rsGraphConfig                                                                   | `rsgraph 配置项` | 0    |
+
+#### rsGraphConfig
+
+-   #### 类型: { data: [], zoom: true, coreOptions: {} }
+-   #### 参数:
+
+    | prop        | type                        | desc               | must |
+    | :---------- | :-------------------------- | :----------------- | :--- |
+    | data        | `Array`                     | _node 间关系数据_  | 1    |
+    | zoom        | `Boolean`                   | _是否开启缩放功能_ | 0    |
+    | coreOptions | [coreOptions](#coreoptions) | _core 类配置项_    | 0    |
+
+*   #### Usage:
+
+    ```js
+    const config = {
+        data: nodes,
+        zoom: true,
+        coreOptions: {
+            style: {
+                borderTop: '1px dashed #000',
+                overflow: 'scroll',
+            },
+            linkDot: {
+                display: 'none', // 此时默认 display: none
+            },
+            mode: 'link-mode', // 此时设置 link-mode 将不会生效
+        },
+    };
+    ```
 
 ## Methods
 
 #### Core Methods
 
-| 属性                                 | 类型       | 描述                                                                                                                                  |
-| :----------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `addNode`(node)                      | `Function` | _在 Svg 容器中加入节点_                                                                                                               |
-| `addEdge`(edge, config)              | `Function` | \_在 Svg 容器中加入路径，用以描述节点之间关系。必需传路径配置项，仅在渲染模式中使用 `config: { source, target, dotLink, dotEndLink }` |
-| `deleteNode`(node)                   | `Function` | _删除节点数据并从 SVG 容器中移除节点_                                                                                                 |
-| `deleteEdge`(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_                                                                                             |
-| `showSvgElement`(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
-| `hiddenSvgElement`(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
+| 属性                               | 类型       | 描述                                                                                                                                  |
+| :--------------------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| addNode(node)                      | `Function` | _在 Svg 容器中加入节点_                                                                                                               |
+| addEdge(edge, config)              | `Function` | _在 Svg 容器中加入路径，用以描述节点之间关系。必需传路径配置项，仅在渲染模式中使用 `config: { source, target, dotLink, dotEndLink }`_ |
+| deleteNode(node)                   | `Function` | _删除节点数据并从 SVG 容器中移除节点_                                                                                                 |
+| deleteEdge(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_                                                                                             |
+| showSvgElement(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
+| hiddenSvgElement(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
 
 #### Usage:
 
@@ -240,7 +318,7 @@ coreInstance.addEdge(edgeInstance, {
 
 | prop                       | type       | desc                                                                          |
 | :------------------------- | :--------- | :---------------------------------------------------------------------------- |
-| `changePosition`(position) | `Function` | _更改 `position` 属性值，传入 [`positionObject`](#nodeconfig-positionobject)_ |
+| changePosition(position) | `Function` | _更改 `position` 属性值，传入 [`positionObject`](#nodeconfig-positionobject)_ |
 
 #### Usage:
 
@@ -340,77 +418,13 @@ nodeInstance.changePosition({
 
 #### [推荐查看例子 (`如何在渲染模式中内嵌自定义html元素`)](https://github.com/TimRChen/flowchart-core/blob/master/example/example.js)
 
-```js
-import { Core, Node } from 'flowchart-core';
+-   样例：自定义节点内容
 
-const svgContainer = document.getElementById('svg-container');
+![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
 
-const container = new Core(svgContainer, {
-    style: {
-        width: '100vw',
-        height: '100vh',
-        border: '1px dashed #000',
-    },
-    line: {
-        style: {
-            stroke: 'deepskyblue',
-        },
-        arrow: {
-            style: {
-                fill: 'deepskyblue',
-            },
-            viewBox: '0 0 18 18',
-            d: 'M1,2 L8,6 L1,10 Z',
-        },
-    },
-    linkDot: {
-        r: 2,
-        fill: 'deepskyblue',
-        stroke: 'deepskyblue',
-        strokeWidth: 2,
-    },
-    mode: 'render-mode',
-});
+-   样例：流程配置
 
-const width = 202;
-const height = 157;
-
-const nodeHtml = document.querySelector('.block-1');
-const nodeHtml1 = document.querySelector('.block-2');
-
-const node = new Node({
-    position: {
-        x: 100,
-        y: 150,
-    },
-    style: {
-        width,
-        height,
-        userSelect: 'none',
-    },
-    html: {
-        meta: nodeHtml,
-    },
-});
-
-const node1 = new Node({
-    position: {
-        x: 500,
-        y: 250,
-    },
-    style: {
-        width,
-        height,
-        userSelect: 'none',
-    },
-    html: {
-        meta: nodeHtml1,
-    },
-});
-
-container.addNode(node);
-container.addNode(node1);
-```
+![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
 ## Author
 

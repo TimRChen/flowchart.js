@@ -29,13 +29,19 @@ Two configurable modes: link-mode and render-mode.
  $ npm install flowchart-core
 ```
 
+#### Yarn
+
+```bash
+ $ yarn flowchart-core
+```
+
 ## Layout
 
 ### Topology
 
-#### [Get Usage](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
+#### [Check Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/index.html)
 
-[check demo]()
+#### [Get Usage](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
 
 ```js
 // create topology graph, just use one statement.
@@ -43,6 +49,10 @@ const graph = new RSGraph('#svg-container', {
     data: nodes,
 });
 ```
+
+### Flowchart
+
+#### [Check Demo](https://timrchen.github.io/flowchart-vue/dist/index.html)
 
 ## Mount
 
@@ -181,8 +191,8 @@ container.addNode(node);
 
     | prop     | type                              | desc                   | must |
     | :------- | :-------------------------------- | :--------------------- | :--- |
-    | style    | `stylesheet`                      | _css style_            | 1    |
-    | position | [positionObject](#positionobject) | _node position in svg_ | 1    |
+    | style    | stylesheet                        | _css style_            | 1    |
+    | position | [positionObject](#positionObject) | _node position in svg_ | 1    |
     | html     | [htmlObject](#htmlobject)         | 1                      | 1    |
 
     ##### positionObject
@@ -256,7 +266,7 @@ container.addNode(node);
 
     | prop        | type                        | desc                  | must |
     | :---------- | :-------------------------- | :-------------------- | :--- |
-    | data        | nodes data                  | _node relation data_  | 1    |
+    | data        | `Array`                     | _node relation data_  | 1    |
     | zoom        | `Boolean`                   | _zoom in or zoom out_ | 0    |
     | coreOptions | [coreOptions](#coreoptions) | _core config options_ | 0    |
 
