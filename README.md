@@ -9,25 +9,17 @@
 
 # flowchart-core
 
-A tiny svg flowchart javascript lib, Ability to quickly meet simple process configuration and rendering needs.
+A tiny svg javascript lib, Ability to quickly draw flowchart and topology graph.
 
 [查看简体中文](https://github.com/TimRChen/flowchart-core/blob/master/README_CN.md)
-
--   self define html embed node
-
-![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
-
--   flowchart config.
-
-![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
 ## Advantage
 
 Two configurable modes: link-mode and render-mode.
 
-> link-mode: `Quickly` configure a flow chart for `dragging` and `dropping connections` between nodes
+-   link-mode: `quickly` start flowchart config.
 
-> render-mode: `Quickly` configure a `non-dragable connection` between nodes and a `non-removable` node as a graph for `statically` drawing topological relationships
+-   render-mode: `quickly` drawing topological relationships.
 
 ## Install
 
@@ -35,6 +27,21 @@ Two configurable modes: link-mode and render-mode.
 
 ```bash
  $ npm install flowchart-core
+```
+
+## Layout
+
+### Topology
+
+#### [Get Usage](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
+
+[check demo]()
+
+```js
+// create topology graph, just use one statement.
+const graph = new RSGraph('#svg-container', {
+    data: nodes,
+});
 ```
 
 ## Mount
@@ -57,7 +64,6 @@ const container = new Core(svgContainer, {
         border: '1px dashed #000',
     },
     mode: 'link-mode',
-    // ..
 });
 // define node container width & height.
 const width = 140;
@@ -83,25 +89,54 @@ container.addNode(node);
 
 ## API Reference
 
-### `new Core(svgElement, options)`
+### new Core(svgElement, options)
 
-| prop       | type                          | desc                  | must |
-| :--------- | :---------------------------- | :-------------------- | :--- |
-| svgElement | `SvgElement<svg>`             | _Svg DOM element_     | `1`  |
-| options    | [`coreOptions`](#coreoptions) | _core config options_ | `1`  |
+| prop       | type                        | desc                  | must |
+| :--------- | :-------------------------- | :-------------------- | :--- |
+| svgElement | `SvgElement<svg>`           | _Svg DOM element_     | 1    |
+| options    | [coreOptions](#coreoptions) | _core config options_ | 1    |
 
-#### `coreOptions`
+#### coreOptions
 
--   #### Type: `{ style: {}, line: {}, linkDot: {}, mode: 'render-mode' }`
+-   #### Type: { style: {}, line: {}, linkDot: {}, mode: 'render-mode' }
 
 -   #### Arguments:
 
-    | prop    | type                                      | desc                      | must |
-    | :------ | :---------------------------------------- | :------------------------ | :--- |
-    | style   | `stylesheet`                              | _css style_               | `1`  |
-    | line    | [`lineObject`](#line-lineobject)          | _link path config_        | `0`  |
-    | linkDot | [`linkDotObject`](#linkdot-linkdotobject) | _link dot config_         | `0`  |
-    | mode    | `String`                                  | _link-mode. render-mode._ | `1`  |
+    | prop    | type                            | desc                      | must |
+    | :------ | :------------------------------ | :------------------------ | :--- |
+    | style   | stylesheet                      | _css style_               | 1    |
+    | line    | [lineObject](#lineobject)       | _link path config_        | 0    |
+    | linkDot | [linkDotObject](#linkdotobject) | _link dot config_         | 0    |
+    | mode    | String                          | _link-mode. render-mode._ | 1    |
+
+
+    ##### lineObject
+
+    link line props.
+
+    | prop  | type                                | desc                | must |
+    | :---- | :---------------------------------- | :------------------ | :--- |
+    | style | stylesheet                        | _css style_         | 0  |
+    | arrow | [arrowObject](#arrowObject) | _line arrow config_ | 0  |
+
+    ##### linkDotObject
+
+    > `Only` the following table styles can be used.
+
+    | prop        | type           | desc                        | must |
+    | :---------- | :------------- | :-------------------------- | :--- |
+    | r           | radius       | \<circle> _attr `r` radius_ | 0  |
+    | fill        | fill color   | _color_                     | 0  |
+    | stroke      | stroke color | _color_                     | 0  |
+    | strokeWidth | stroke width | _px_                        | 0  |
+    | display     | css display  | _display value_             | 0  |
+
+    ##### arrowObject
+
+    | prop    | type         | desc                                                                                | must |
+    | :------ | :----------- | :---------------------------------------------------------------------------------- | :--- |
+    | style   | `stylesheet` | _css style_                                                                         | 0  |
+    | viewBox | `String`     | _[svg viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)_ | 0  |
 
 -   #### Usage:
 
@@ -133,54 +168,37 @@ container.addNode(node);
     };
     ```
 
-##### _line_: `lineObject`
+### new Node(config)
 
-link line props.
+| prop   | type       | desc          | must |
+| :----- | :--------- | :------------ | :--- |
+| config | nodeConfig | `node config` | 1    |
 
-| prop  | type                                | desc                | must |
-| :---- | :---------------------------------- | :------------------ | :--- |
-| style | `stylesheet`                        | _css style_         | `0`  |
-| arrow | [`arrowObject`](#arrow-arrowobject) | _line arrow config_ | `0`  |
+#### nodeConfig
 
-##### _line_->_arrow_: `arrowObject`
-
-| prop    | type         | desc                                                                                | must |
-| :------ | :----------- | :---------------------------------------------------------------------------------- | :--- |
-| style   | `stylesheet` | _css style_                                                                         | `0`  |
-| viewBox | `String`     | _[svg viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)_ | `0`  |
-
-##### _linkDot_: `linkDotObject`
-
-> ##### (`Only` the following table styles can be used.)
-
-| prop        | type           | desc                        | must |
-| :---------- | :------------- | :-------------------------- | :--- |
-| r           | `radius`       | \<circle> _attr `r` radius_ | `0`  |
-| fill        | `fill color`   | _color_                     | `0`  |
-| stroke      | `stroke color` | _color_                     | `0`  |
-| strokeWidth | `stroke width` | _px_                        | `0`  |
-| display     | `css display`  | _display value_             | `0`  |
-
----
-
-### `new Node(config)`
-
-| prop   | type         | desc          | must |
-| :----- | :----------- | :------------ | :--- |
-| config | `nodeConfig` | `node config` | `1`  |
-
-#### `nodeConfig`
-
--   #### Type: `{ style: {}, position: { x, y }, html: { meta } }`
+-   #### Type: { style: {}, position: { x, y }, html: { meta } }
 -   #### Arguments:
 
-    | prop     | type                                           | desc                   | must |
-    | :------- | :--------------------------------------------- | :--------------------- | :--- |
-    | style    | `stylesheet`                                   | _css style_            | `1`  |
-    | position | [`positionObject`](#nodeconfig-positionobject) | _node position in svg_ | `1`  |
-    | html     | [`htmlObject`](#nodeconfig-htmlobject)         | `1`                    | `1`  |
+    | prop     | type                              | desc                   | must |
+    | :------- | :-------------------------------- | :--------------------- | :--- |
+    | style    | `stylesheet`                      | _css style_            | 1    |
+    | position | [positionObject](#positionobject) | _node position in svg_ | 1    |
+    | html     | [htmlObject](#htmlobject)         | 1                      | 1    |
 
--   #### Usage:
+    ##### positionObject
+
+    | prop | type     | desc                                                                                        | must |
+    | :--- | :------- | :------------------------------------------------------------------------------------------ | :--- |
+    | x    | `x axis` | _[MouseEvent.clientX](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientX)_ | 1    |
+    | y    | `y axis` | _[MouseEvent.clientY](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientY)_ | 1    |
+
+    ##### htmlObject
+
+    | prop | type          | desc          | must |
+    | :--- | :------------ | :------------ | :--- |
+    | meta | `DomInstance` | _Dom element_ | 1    |
+
+*   #### Usage:
 
     ```js
     const config = {
@@ -199,31 +217,80 @@ link line props.
     };
     ```
 
-##### _nodeConfig_: `positionObject`
+### new Edge(config)
 
-| prop | type     | desc                                                                                        | must |
-| :--- | :------- | :------------------------------------------------------------------------------------------ | :--- |
-| x    | `x axis` | _[MouseEvent.clientX](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientX)_ | `1`  |
-| y    | `y axis` | _[MouseEvent.clientY](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/clientY)_ | `1`  |
+| prop   | type       | desc          | must |
+| :----- | :--------- | :------------ | :--- |
+| config | edgeConfig | `edge config` | 0    |
 
-##### _nodeConfig_: `htmlObject`
+#### edgeConfig
 
-| prop | type          | desc          | must |
-| :--- | :------------ | :------------ | :--- |
-| meta | `DomInstance` | _Dom element_ | `1`  |
+-   #### Type: { style: {} }
+-   #### Arguments:
+
+    | prop  | type         | desc        | must |
+    | :---- | :----------- | :---------- | :--- |
+    | style | `stylesheet` | _css style_ | 1    |
+
+*   #### Usage:
+
+    ```js
+    const config = {
+        style: {
+            stroke: 'deepskyblue',
+        },
+    };
+    ```
+
+### new RSGraph(selectors, config)
+
+| prop      | type                                                                            | desc             | must |
+| :-------- | :------------------------------------------------------------------------------ | :--------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | `css selectors`  | 0    |
+| config    | rsGraphConfig                                                                   | `rsgraph config` | 0    |
+
+#### rsGraphConfig
+
+-   #### Type: { data: [], zoom: true, coreOptions: {} }
+-   #### Arguments:
+
+    | prop        | type                        | desc                  | must |
+    | :---------- | :-------------------------- | :-------------------- | :--- |
+    | data        | nodes data                  | _node relation data_  | 1    |
+    | zoom        | `Boolean`                   | _zoom in or zoom out_ | 0    |
+    | coreOptions | [coreOptions](#coreoptions) | _core config options_ | 0    |
+
+*   #### Usage:
+
+    ```js
+    const config = {
+        data: nodes,
+        zoom: true,
+        coreOptions: {
+            style: {
+                borderTop: '1px dashed #000',
+                overflow: 'scroll',
+            },
+            linkDot: {
+                display: 'none', // default is display: none
+            },
+            mode: 'link-mode', // set link-mode will not work.
+        },
+    };
+    ```
 
 ## Methods
 
 #### Core Methods
 
-| prop                                 | type       | desc                                                                                                                                                 |
-| :----------------------------------- | :--------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `addNode`(node)                      | `Function` | _add node to svg container_                                                                                                                          |
-| `addEdge`(edge, config)              | `Function` | \_add a path to svg container to describe the relationship between nodes, just use in render mode, `config: { source, target, dotLink, dotEndLink }` |
-| `deleteNode`(node)                   | `Function` | _delete node data and remove node from svg container_                                                                                                |
-| `deleteEdge`(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                                |
-| `showSvgElement`(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                                 |
-| `hiddenSvgElement`(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                               |
+| prop                               | type       | desc                                                                                                                                                 |
+| :--------------------------------- | :--------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| addNode(node)                      | `Function` | _add node to svg container_                                                                                                                          |
+| addEdge(edge, config)              | `Function` | _add a path to svg container to describe the relationship between nodes, just use in render mode, `config: { source, target, dotLink, dotEndLink }`_ |
+| deleteNode(node)                   | `Function` | _delete node data and remove node from svg container_                                                                                                |
+| deleteEdge(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                                |
+| showSvgElement(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                                 |
+| hiddenSvgElement(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                               |
 
 #### Usage:
 
@@ -241,9 +308,9 @@ coreInstance.addEdge(edgeInstance, {
 
 #### Node Methods
 
-| prop                       | type       | desc                                                                                    |
-| :------------------------- | :--------- | :-------------------------------------------------------------------------------------- |
-| `changePosition`(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
+| prop                     | type       | desc                                                                                    |
+| :----------------------- | :--------- | :-------------------------------------------------------------------------------------- |
+| changePosition(position) | `Function` | _change node `position`, attribute is a [`positionObject`](#nodeconfig-positionobject)_ |
 
 #### Usage:
 
@@ -277,12 +344,12 @@ nodeInstance.changePosition({
 
 -   #### Arguments:
 
-| prop  | type             | desc                                                                                       |
-| :---- | :--------------- | :----------------------------------------------------------------------------------------- |
-| id    | `Number`         | _unique node id_                                                                           |
-| node  | `SvgElement<g>`  | _node container \<g>. As real node to use. `Accessible to all DOM attribute values on it`_ |
-| html  | `String`         | _`html element embed` in node inside_                                                      |
-| style | `css stylesheet` | _node style_                                                                               |
+    | prop  | type            | desc                                                                                       |
+    | :---- | :-------------- | :----------------------------------------------------------------------------------------- |
+    | id    | `Number`        | _unique node id_                                                                           |
+    | node  | `SvgElement<g>` | _node container \<g>. As real node to use. `Accessible to all DOM attribute values on it`_ |
+    | html  | `String`        | _`html element embed` in node inside_                                                      |
+    | style | `stylesheet`    | _node style_                                                                               |
 
 -   #### Usage:
 
@@ -343,77 +410,13 @@ nodeInstance.changePosition({
 
 #### [Recommand to check more example (`how to embed self define div node`)](https://github.com/TimRChen/flowchart-core/blob/master/example/example.js)
 
-```js
-import { Core, Node } from 'flowchart-core';
+-   self define html embed node
 
-const svgContainer = document.getElementById('svg-container');
+![eg-graph](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example.png)
 
-const container = new Core(svgContainer, {
-    style: {
-        width: '100vw',
-        height: '100vh',
-        border: '1px dashed #000',
-    },
-    line: {
-        style: {
-            stroke: 'deepskyblue',
-        },
-        arrow: {
-            style: {
-                fill: 'deepskyblue',
-            },
-            viewBox: '0 0 18 18',
-            d: 'M1,2 L8,6 L1,10 Z',
-        },
-    },
-    linkDot: {
-        r: 2,
-        fill: 'deepskyblue',
-        stroke: 'deepskyblue',
-        strokeWidth: 2,
-    },
-    mode: 'render-mode',
-});
+-   flowchart config.
 
-const width = 202;
-const height = 157;
-
-const nodeHtml = document.querySelector('.block-1');
-const nodeHtml1 = document.querySelector('.block-2');
-
-const node = new Node({
-    position: {
-        x: 100,
-        y: 150,
-    },
-    style: {
-        width,
-        height,
-        userSelect: 'none',
-    },
-    html: {
-        meta: nodeHtml,
-    },
-});
-
-const node1 = new Node({
-    position: {
-        x: 500,
-        y: 250,
-    },
-    style: {
-        width,
-        height,
-        userSelect: 'none',
-    },
-    html: {
-        meta: nodeHtml1,
-    },
-});
-
-container.addNode(node);
-container.addNode(node1);
-```
+![eg-graph-1](https://github.com/TimRChen/demo-item-display/blob/master/flowchart-core/example1.png)
 
 ## Author
 

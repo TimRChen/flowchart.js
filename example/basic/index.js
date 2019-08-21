@@ -1,4 +1,4 @@
-import { Core, Node, Edge } from '../src/index.js';
+import { Core, Node, Edge } from '../../src/index.js';
 
 const svgContainer = document.getElementById('svg-container');
 

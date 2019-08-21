@@ -4,7 +4,7 @@
   "description": "tiny flowchart-js lib",
   "main": "dist/flowchart-core.min.js",
   "scripts": {
-    "dev": "parcel example/index.html",
+    "dev": "parcel example/layout/RSGraph/index.html",
     "build": "parcel build src/index.js --out-file flowchart-core.min.js --no-source-maps --no-cache --global flowchart-core"
   },
   "keywords": [
@@ -14,5 +14,9 @@
   "license": "MIT",
   "devDependencies": {
     "parcel-bundler": "^1.12.3"
+  },
+  "dependencies": {
+    "d3-selection": "^1.4.0",
+    "d3-zoom": "^1.8.3"
   }
 }

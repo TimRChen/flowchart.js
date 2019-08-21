@@ -7,7 +7,6 @@ export function getRectWH(style) {
     rectHeight = height;
 }
 
-
 /**
  * 横坐标最小连线误差直线拟合
  * @argument {String} startX 起始点XAxis

@@ -21,3 +21,11 @@ export function getRandomStr() {
 export function creatSvgElement(tagName) {
     return document.createElementNS('http://www.w3.org/2000/svg', tagName);
 }
+
+/**
+ * 获取数据类型
+ * @param {*} data
+ */
+export function typeOf(data) {
+    return Object.prototype.toString.call(data).slice(8, -1);
+}

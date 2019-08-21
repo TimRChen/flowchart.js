@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>节点关系样例</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            .head {
+                text-align: left;
+                margin: 20px;
+            }
+            h3 {
+                margin-bottom: 10px;
+            }
+            div.item {
+                width: 50px;
+                height: 50px;
+                color: #fff;
+                font-size: 12px;
+                font-weight: bold;
+                background-color: #000;
+                border-radius: 4px;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            div.node-zone {
+                width: 100%;
+                overflow: scroll;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="head">
+            <h3>关系型节点数据图</h3>
+            <div>您只需引入 RSGraph类 并稍作配置</div>
+            <div>便可轻易获得描述各类节点关系的SVG展示</div>
+            <div>并且，您还可自通过RSGraph实例上的属性轻松的操作您的节点</div>
+        </div>
+        <svg
+            id="container"
+            width="100vw"
+            height="80vh"
+            viewBox="0 0 1000 1000"
+            preserveAspectRatio="xMinYMin meet"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+        ></svg>
+
+        <script src="./index.js"></script>
+    </body>
+</html>

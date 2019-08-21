@@ -1,6 +1,4 @@
-.cache
-node_modules
-dist/example*
-dist/index.html
-dist/index.js
-dist/index.js.map
+.cache/
+node_modules/
+dist/
+!dist/flowchart-core.min.js
