@@ -270,7 +270,15 @@ container.addNode(node);
 
 *   #### Usage:
 
+    > [`警告⚠️`] Add id attribute to the DOM element of node before using it.
+
     ```js
+    const nodes = [{...}, ..., {...}]; // mock nodes
+    // 给node的DOM元素增加id属性
+    nodes.forEach(node => {
+        const node = document.querySelector('.node');
+        node.setAttribute('data-rsgraph-id', node.id); // 为了查询node的DOM
+    });
     const config = {
         data: nodes,
         zoom: true,

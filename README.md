@@ -272,7 +272,15 @@ container.addNode(node);
 
 *   #### Usage:
 
+    > [`Warning⚠️`] Add id attribute to the DOM element of node before using it.
+
     ```js
+    const nodes = [{...}, ..., {...}]; // mock nodes
+    // add id attribute to node dom element.
+    nodes.forEach(node => {
+        const node = document.querySelector('.node');
+        node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
+    });
     const config = {
         data: nodes,
         zoom: true,
