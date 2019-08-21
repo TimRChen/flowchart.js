@@ -254,10 +254,10 @@ container.addNode(node);
 
 ### new RSGraph(selectors, config)
 
-| prop      | type                                                                            | desc             | must |
-| :-------- | :------------------------------------------------------------------------------ | :--------------- | :--- |
-| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | `css selectors`  | 0    |
-| config    | rsGraphConfig                                                                   | `rsgraph config` | 0    |
+| prop      | type                                                                            | desc           | must |
+| :-------- | :------------------------------------------------------------------------------ | :------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | css selectors  | 1    |
+| config    | rsGraphConfig                                                                   | rsgraph config | 0    |
 
 #### rsGraphConfig
 

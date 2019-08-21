@@ -252,10 +252,10 @@ container.addNode(node);
 
 ### new RSGraph(selectors, config)
 
-| prop      | type                                                                            | desc             | must |
-| :-------- | :------------------------------------------------------------------------------ | :--------------- | :--- |
-| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | `css 选择字符串` | 0    |
-| config    | rsGraphConfig                                                                   | `rsgraph 配置项` | 0    |
+| prop      | type                                                                            | desc           | must |
+| :-------- | :------------------------------------------------------------------------------ | :------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | css 选择字符串 | 1    |
+| config    | rsGraphConfig                                                                   | rsgraph 配置项 | 0    |
 
 #### rsGraphConfig
 
@@ -316,8 +316,8 @@ coreInstance.addEdge(edgeInstance, {
 
 #### Node Methods
 
-| prop                       | type       | desc                                                                          |
-| :------------------------- | :--------- | :---------------------------------------------------------------------------- |
+| prop                     | type       | desc                                                                          |
+| :----------------------- | :--------- | :---------------------------------------------------------------------------- |
 | changePosition(position) | `Function` | _更改 `position` 属性值，传入 [`positionObject`](#nodeconfig-positionobject)_ |
 
 #### Usage:
