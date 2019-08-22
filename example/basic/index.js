@@ -1,8 +1,8 @@
 import { Core, Node, Edge } from '../../src/index.js';
 
-const svgContainer = document.getElementById('svg-container');
+const selectors = '#svg-container';
 
-const container = new Core(svgContainer, {
+const core = new Core(selectors, {
     style: {
         width: '100vw',
         height: '100vh',
@@ -26,6 +26,12 @@ const container = new Core(svgContainer, {
     },
     mode: 'link-mode', // must need. default is false 是否可配置流程
 });
+
+// 缩放功能，开启后 mode 即变为render-mode，注意，此处再设置为 link-mode 无效
+core.zoom();
+
+// 动态设置连接模式
+// core.mode = 'render-mode';
 
 // 从这里开始是业务逻辑.
 
@@ -100,10 +106,10 @@ const parentNode = new Node({
     },
 });
 
-container.addNode(mainNode);
-container.addNode(childNode1);
-container.addNode(childNode2);
-container.addNode(parentNode);
+core.addNode(mainNode);
+core.addNode(childNode1);
+core.addNode(childNode2);
+core.addNode(parentNode);
 
 // 改变node的位置
 mainNode.changePosition({
@@ -136,19 +142,19 @@ const edge1 = new Edge(blueLineStyle);
 const edge2 = new Edge(blueLineStyle);
 const edge3 = new Edge(redLineStyle);
 
-container.addEdge(edge1, {
+core.addEdge(edge1, {
     source: mainNode.id,
     target: childNode1.id,
     dotLink: 'bottom',
     dotEndLink: 'top',
 });
-container.addEdge(edge2, {
+core.addEdge(edge2, {
     source: mainNode.id,
     target: childNode2.id,
     dotLink: 'bottom',
     dotEndLink: 'top',
 });
-container.addEdge(edge3, {
+core.addEdge(edge3, {
     source: mainNode.id,
     target: parentNode.id,
     dotLink: 'right',
@@ -160,28 +166,28 @@ container.addEdge(edge3, {
 const bottomDecrease = document.querySelector('.bottom.main-node-decrease');
 let clickFlag = false;
 bottomDecrease.onclick = function controlClo() {
-    const { edges } = container;
+    const { edges } = core;
     if (!clickFlag) {
         // close
         clickFlag = true;
-        container.hiddenSvgElement(childNode1, 'node');
-        container.hiddenSvgElement(childNode2, 'node');
+        core.hiddenSvgElement(childNode1, 'node');
+        core.hiddenSvgElement(childNode2, 'node');
         const cNode1Line = edges.find(edge => edge.target === childNode1.id);
         const cNode2Line = edges.find(edge => edge.target === childNode2.id);
         if (cNode1Line && cNode2Line) {
-            container.hiddenSvgElement(cNode1Line, 'edge');
-            container.hiddenSvgElement(cNode2Line, 'edge');
+            core.hiddenSvgElement(cNode1Line, 'edge');
+            core.hiddenSvgElement(cNode2Line, 'edge');
         }
     } else {
         // open
         clickFlag = false;
-        container.showSvgElement(childNode1, 'node');
-        container.showSvgElement(childNode2, 'node');
+        core.showSvgElement(childNode1, 'node');
+        core.showSvgElement(childNode2, 'node');
         const cNode1Line = edges.find(edge => edge.target === childNode1.id);
         const cNode2Line = edges.find(edge => edge.target === childNode2.id);
         if (cNode1Line && cNode2Line) {
-            container.showSvgElement(cNode1Line, 'edge');
-            container.showSvgElement(cNode2Line, 'edge');
+            core.showSvgElement(cNode1Line, 'edge');
+            core.showSvgElement(cNode2Line, 'edge');
         }
     }
 };

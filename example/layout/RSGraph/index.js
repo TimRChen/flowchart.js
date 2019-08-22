@@ -30,7 +30,7 @@ nodes.forEach(node => {
 const config = {
     data: nodes,
     // 可选
-    zoom: true,
+    zoom: true, // 默认为 false
     coreOptions: {
         style: {
             borderTop: '1px dashed #000',

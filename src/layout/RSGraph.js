@@ -37,41 +37,16 @@ export default class RSGraph {
      * @argument {Object} config
      */
     init(selectors, config) {
-        const { zoom = true, coreOptions = {} } = config;
-        const svgDom = document.querySelector(selectors);
-        if (typeof svgDom === 'object') {
-            const options = {
-                linkDot: {
-                    display: 'none',
-                },
-            };
-            Object.assign(options, coreOptions, { mode: 'render-mode' });
-            this.core = new Core(svgDom, options);
-            this.initialLayout(this.nodes);
-            if (zoom) this.initialZoom(selectors);
-        } else {
-            throw TypeError(`${svgDom} is not a Svg DOM Element.`);
-        }
-    }
-
-    /**
-     * 初始化缩放
-     * @argument {String} selectors dom选择字符串
-     */
-    initialZoom(selectors) {
-        const d3 = require('d3-selection');
-        const d3Zoom = require('d3-zoom');
-        const svg = d3.select(selectors);
-        const g = d3.selectAll('g').filter('.graph, .edges');
-        const zoomRange = [0.5, 8];
-        svg.call(
-            d3Zoom
-                .zoom()
-                .scaleExtent(zoomRange)
-                .on('zoom', () => {
-                    g.attr('transform', d3.event.transform);
-                }),
-        );
+        const { zoom = false, coreOptions = {} } = config;
+        const options = {
+            linkDot: {
+                display: 'none',
+            },
+        };
+        Object.assign(options, coreOptions, { mode: 'render-mode' });
+        this.core = new Core(selectors, options);
+        this.initialLayout(this.nodes);
+        if (zoom) this.core.zoom(selectors);
     }
 
     /**

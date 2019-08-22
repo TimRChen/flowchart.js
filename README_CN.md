@@ -37,16 +37,52 @@
 
 ### Topology
 
-#### [查看 Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/)
-
-#### [查看示例代码](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
+#### [查看 Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/index.html) | [查看示例代码](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
 
 ```js
-// create topology graph, just use one statement.
-const graph = new RSGraph('#svg-container', {
-    data: nodes,
+const nodes = [
+    {
+        id: 'root',
+        children: ['node1', 'node2'],
+        parent: null,
+    },
+    {
+        id: 'node1',
+        children: [],
+        parent: 'root',
+    },
+    {
+        id: 'node2',
+        children: [],
+        parent: 'root',
+    },
+];
+
+// add id attribute to node dom element.
+nodes.forEach(node => {
+    const node = document.querySelector('.node');
+    node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
 });
+
+const config = {
+    data: nodes,
+    zoom: true,
+    coreOptions: {
+        style: {
+            borderTop: '1px dashed #000',
+            overflow: 'scroll',
+        },
+        linkDot: {
+            display: 'none', // default is display: none
+        },
+        mode: 'link-mode', // set link-mode will not work.
+    },
+};
+
+const graph = new RSGraph('#svg-container', config);
 ```
+
+[`warning`] Add `data-rsgraph-id` attribute to the DOM element of node before using it.
 
 ### Flowchart
 
@@ -63,9 +99,8 @@ const graph = new RSGraph('#svg-container', {
 
 ```js
 import { Core, Node } from 'flowchart-core';
-const svgContainer = document.getElementById('svg-container');
 // 实例化 Core.
-const container = new Core(svgContainer, {
+const core = new Core('#svg-container', {
     style: {
         width: 1000,
         height: 600,
@@ -92,17 +127,21 @@ const node = new Node({
     },
 });
 
-container.addNode(node);
+// 开启缩放
+core.zoom();
+
+// 增加节点至svg中
+core.addNode(node);
 ```
 
 ## API Reference
 
-### new Core(svgElement, options)
+### new Core(selectors, options)
 
-| 属性       | 类型                          | 描述            | 必须 |
-| :--------- | :---------------------------- | :-------------- | :--- |
-| svgElement | `SvgElement<svg>`             | _Svg DOM 元素_  | 1    |
-| options    | [`coreOptions`](#coreoptions) | _core 配置选项_ | 1    |
+| 属性      | 类型                                                                            | 描述                     | 必须 |
+| :-------- | :------------------------------------------------------------------------------ | :----------------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | _Svg DOM 元素选择器名称_ | 1    |
+| options   | [`coreOptions`](#coreoptions)                                                   | _core 配置选项_          | 1    |
 
 #### coreOptions
 
@@ -270,15 +309,7 @@ container.addNode(node);
 
 *   #### Usage:
 
-    > [`警告⚠️`] Add id attribute to the DOM element of node before using it.
-
     ```js
-    const nodes = [{...}, ..., {...}]; // mock nodes
-    // 给node的DOM元素增加id属性
-    nodes.forEach(node => {
-        const node = document.querySelector('.node');
-        node.setAttribute('data-rsgraph-id', node.id); // 为了查询node的DOM
-    });
     const config = {
         data: nodes,
         zoom: true,
@@ -307,12 +338,13 @@ container.addNode(node);
 | deleteEdge(edge)                   | `Function` | _删除连接路径数据并从 SVG 容器中移除路径_                                                                                             |
 | showSvgElement(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
 | hiddenSvgElement(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
+| zoom()                             | `Function` | _开启缩放功能，开启后 mode 自动变为 render-mode，渲染模式下不支持节点连接及节点拖拽_                                                  |
 
 #### Usage:
 
 ```js
 // eg. 如何在core实例中插入一条线.
-const coreInstance = new Core(svgContainer, { ... });
+const coreInstance = new Core('#svg-container', { ... });
 const edgeInstance = new Edge({ ... });
 coreInstance.addEdge(edgeInstance, {
     source: sourceNode.id,
@@ -332,7 +364,7 @@ coreInstance.addEdge(edgeInstance, {
 
 ```js
 // eg. 如何在创建node后，动态改变其position
-const coreInstance = new Core(svgContainer, { ... });
+const coreInstance = new Core('#svg-container', { ... });
 const nodeInstance = new Node({ ... });
 nodeInstance.changePosition({
     x: 130,
@@ -348,13 +380,13 @@ nodeInstance.changePosition({
 
 -   #### 参数:
 
-    | 属性         | 类型              | 描述                     |
-    | :----------- | :---------------- | :----------------------- |
-    | svgContainer | `SvgElement<svg>` | _Svg Dom_                |
-    | nodes        | `Array<Object>`   | _node dom list_          |
-    | edges        | `Array<Object>`   | _edge dom list_          |
-    | nodeG        | `SvgElement<g>`   | _\<g> tag. nodes 的容器_ |
-    | edgeG        | `SvgElement<g>`   | _\<g> tag. edges 的容器_ |
+    | 属性      | 类型              | 描述                     |
+    | :-------- | :---------------- | :----------------------- |
+    | container | `SvgElement<svg>` | _Svg Dom_                |
+    | nodes     | `Array<Object>`   | _node dom list_          |
+    | edges     | `Array<Object>`   | _edge dom list_          |
+    | nodeG     | `SvgElement<g>`   | _\<g> tag. nodes 的容器_ |
+    | edgeG     | `SvgElement<g>`   | _\<g> tag. edges 的容器_ |
 
 ### `Node`
 
@@ -371,7 +403,7 @@ nodeInstance.changePosition({
 
     ```js
     // eg. 如何使得一个节点实例显示或隐藏.
-    const coreInstance = new Core(svgContainer, { ... });
+    const coreInstance = new Core('#svg-container', { ... });
     const nodeInstance = new Node({
         position: {
             x: 100,
@@ -407,7 +439,7 @@ nodeInstance.changePosition({
 
     ```js
     // eg. 创建edge实例并添加至svg容器中
-    const coreInstance = new Core(svgContainer, { ... })
+    const coreInstance = new Core('#svg-container', { ... })
     const edgeInstance = new Edge({
         style: {
             stroke: 'deepskyblue',

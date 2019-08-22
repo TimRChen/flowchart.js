@@ -11,140 +11,119 @@ import {
     getMidYPath,
 } from '../utils/path.js';
 
+const isString = fn => typeof fn === 'string';
+
+const nodeGroupClass = 'graph';
+const edgeGroupClass = 'edges';
+const virtualGroupClass = 'virtual-edge';
+const virtualEdgeConfig = {
+    style: {
+        strokeDasharray: 8,
+        stroke: '#888',
+    },
+};
+
 /**
  * flowchart核心库
  * @description 容器类
  * @author TimRChen <timrchen@foxmai.com>
  */
 export default class Core {
-    constructor(svgContainer, options = {}) {
-        // initial class property.
+    constructor(selectors, options = {}) {
+        this.selectors = selectors;
         this.nodes = [];
         this.edges = [];
-        this.svgContainer = svgContainer;
-        this.options = options;
-        this.nodeG = this.createGroup(svgContainer, 'graph');
-        this.virtualG = this.createGroup(svgContainer, 'virtual-edge');
-        this.edgeG = this.createGroup(svgContainer, 'edges');
-        this.initializeContinaer(svgContainer, options);
         this.edge = {};
-        this.virtualEdge = new Edge({
-            style: {
-                strokeDasharray: 8,
-                stroke: '#888',
+        this.options = options;
+        this.container = this.querySelector(selectors);
+        this.nodeGroup = this.createGroup(nodeGroupClass);
+        this.edgeGroup = this.createGroup(edgeGroupClass);
+        this.virtualGroup = this.createGroup(virtualGroupClass);
+        this.virtualEdge = new Edge(virtualEdgeConfig);
+        this.createExtraElement();
+        this.watchProperty(options);
+        Object.assign(this.container.style, this.options.style);
+    }
+
+    watchProperty({ mode }) {
+        this.modeHandler(mode);
+        let value = mode;
+        Object.defineProperty(this, 'mode', {
+            enumerable: true,
+            get: () => value,
+            set: setValue => {
+                if (setValue === 'render-mode' || setValue === 'link-mode') {
+                    this.modeHandler(setValue);
+                    value = setValue;
+                } else {
+                    throw Error(`${v} is invalid mode.`);
+                }
             },
         });
     }
 
+    modeHandler(mode) {
+        if (mode === 'link-mode') {
+            // 用户设置为可控制时，绑定相关事件
+            this.bindMouseEvent();
+        } else if (mode === 'render-mode') {
+            // 用户设置为渲染模式时，解绑相关事件
+            this.unBindMouseEvent();
+        }
+    }
+
+    querySelector(selectors) {
+        if (isString(selectors)) {
+            return document.querySelector(selectors);
+        } else {
+            throw TypeError(`selectors ${selectors} is not string`);
+        }
+    }
+
+    /**
+     * 缩放
+     */
+    zoom() {
+        this.mode = 'render-mode';
+        const d3 = require('d3-selection');
+        const d3Zoom = require('d3-zoom');
+        const svg = d3.select(this.selectors);
+        const g = d3.selectAll('g').filter('.graph, .edges');
+        const zoomRange = [0.5, 8];
+        const d3ZoomEvent = d3Zoom
+            .zoom()
+            .scaleExtent(zoomRange)
+            .on('zoom', () => {
+                g.attr('transform', d3.event.transform);
+            });
+        svg.call(d3ZoomEvent).on('dblclick.zoom', null);
+    }
+
     /**
      * 产生容器组
-     * @argument {SVGElement} container
      * @argument {string} className
      */
-    createGroup(container, className) {
+    createGroup(className) {
         const g = creatSvgElement('g');
         g.setAttribute('class', className);
-        container.appendChild(g);
+        this.container.appendChild(g);
         return g;
     }
 
     /**
-     * 初始化容器
-     * @argument {SVGElement} container
-     * @argument {Object} options
-     */
-    initializeContinaer(container, options) {
-        Object.assign(container.style, options.style);
-        this.createExtraElement(container);
-        this.bindMouseEvent(container);
-    }
-
-    /**
-     * 创建额外元素
-     * @argument {SVGElement} container
-     */
-    createExtraElement(container) {
-        // 设置连接线箭头样式
-        const defs = creatSvgElement('defs');
-        const marker = creatSvgElement('marker');
-        const path = creatSvgElement('path');
-        marker.setAttribute('id', 'mark-arrow');
-        marker.setAttribute('viewBox', '0 0 11 11');
-        marker.setAttribute('refX', '8');
-        marker.setAttribute('refY', '6');
-        marker.setAttribute('markerWidth', '10');
-        marker.setAttribute('markerHeight', '10');
-        marker.setAttribute('orient', 'auto');
-        path.setAttribute('d', 'M1,2 L8,6 L1,10 Z');
-        // diy arrow style.
-        if ('line' in this.options) {
-            if ('arrow' in this.options.line) {
-                const line = this.options.line;
-                if ('style' in line.arrow) {
-                    Object.assign(path.style, line.arrow.style);
-                }
-                if ('d' in line.arrow && typeof line.arrow.d === 'string') {
-                    path.setAttribute('d', line.arrow.d);
-                }
-                if (
-                    'viewBox' in line.arrow &&
-                    typeof line.arrow.viewBox === 'string'
-                ) {
-                    marker.setAttribute('viewBox', line.arrow.viewBox);
-                }
-            }
-        }
-        marker.appendChild(path);
-        defs.appendChild(marker);
-        container.appendChild(defs);
-
-        // 设置link dot基础样式
-        const graphStyle = document.createElement('style');
-        graphStyle.setAttribute('class', 'flowchart-core-style');
-        const head = document.querySelector('head');
-        if ('mode' in this.options && this.options.mode === 'link-mode') {
-            // 用户设置为可控制时，连接点展示连接效果
-            graphStyle.innerText = `
-                .link-dot:hover {
-                    r: 12px!important;
-                    stroke: red!important;
-                    fill: transparent!important;
-                }
-            `;
-        }
-        // diy dot style.
-        const {
-            r = 2,
-            fill = '#000',
-            stroke = '#000',
-            strokeWidth = 2,
-            display = 'unset',
-        } = this.options.linkDot || {};
-        graphStyle.innerText += `
-                .link-dot {
-                    r: ${r}px;
-                    fill: ${fill};
-                    stroke: ${stroke};
-                    stroke-width: ${strokeWidth}px;
-                    transition: all 0.2s ease-in-out;
-                    display: ${display};
-                }
-            `;
-        if (!document.querySelector('.flowchart-core-style')) {
-            head.appendChild(graphStyle);
-        }
-    }
-
-    /**
      * 为svg容器绑定mouse event
-     * @argument {SVGElement} container
      */
-    bindMouseEvent(container) {
-        if ('mode' in this.options && this.options.mode === 'link-mode') {
-            // 用户设置为可控制时，绑定相关事件
-            container.onmousemove = this.handleSvgMouseMove.bind(this);
-            container.onmouseup = this.handleSvgMouseUp.bind(this);
-        }
+    bindMouseEvent() {
+        this.container.onmousemove = this.handleSvgMouseMove.bind(this);
+        this.container.onmouseup = this.handleSvgMouseUp.bind(this);
+    }
+
+    /**
+     * 解绑svg容器mouse event
+     */
+    unBindMouseEvent() {
+        this.container.onmousemove = null;
+        this.container.onmouseup = null;
     }
 
     /**
@@ -199,16 +178,6 @@ export default class Core {
     }
 
     /**
-     * 变更鼠标样式
-     * @argument {string} stage
-     */
-    changeMouseStyle(stage) {
-        let cursor = 'initial';
-        if (stage === 'start') cursor = 'crosshair';
-        Object.assign(this.svgContainer.style, { cursor });
-    }
-
-    /**
      * 节点连接处理
      * @argument {MouseEvent} event - mouse event
      */
@@ -231,9 +200,19 @@ export default class Core {
             this.edge.source = linkNode.id;
             this.edge.dotLink = linkNode.dotLink;
             // 插入虚拟edge实例
-            this.virtualG.appendChild(this.virtualEdge.edge);
+            this.virtualGroup.appendChild(this.virtualEdge.edge);
             this.virtualEdge.lineData = this.caclPathDragData(linkNode, event);
         }
+    }
+
+    /**
+     * 变更鼠标样式
+     * @argument {string} stage
+     */
+    changeMouseStyle(stage) {
+        let cursor = 'initial';
+        if (stage === 'start') cursor = 'crosshair';
+        Object.assign(this.container.style, { cursor });
     }
 
     /**
@@ -256,7 +235,7 @@ export default class Core {
                 // 新连接路径推入路径栈中
                 this.edges.push(this.edge);
                 // 向路径容器中插入路径
-                this.edgeG.appendChild(this.edge.edge);
+                this.edgeGroup.appendChild(this.edge.edge);
             }
             // 清空被连接端节点，末尾连接点类型数据
             endLinkNode.dotEndLink = '';
@@ -274,8 +253,8 @@ export default class Core {
             if (node.linkActive) {
                 node.linkActive = false;
                 node.dotLink = '';
-                if (this.virtualG.hasChildNodes()) {
-                    this.virtualG.removeChild(this.virtualEdge.edge);
+                if (this.virtualGroup.hasChildNodes()) {
+                    this.virtualGroup.removeChild(this.virtualEdge.edge);
                 }
             }
             return node;
@@ -444,12 +423,83 @@ export default class Core {
     }
 
     /**
+     * 创建额外元素
+     */
+    createExtraElement() {
+        // 设置连接线箭头样式
+        const defs = creatSvgElement('defs');
+        const marker = creatSvgElement('marker');
+        const path = creatSvgElement('path');
+        marker.setAttribute('id', 'mark-arrow');
+        marker.setAttribute('refX', '8');
+        marker.setAttribute('refY', '6');
+        marker.setAttribute('orient', 'auto');
+        marker.setAttribute('viewBox', '0 0 11 11');
+        marker.setAttribute('markerWidth', '10');
+        marker.setAttribute('markerHeight', '10');
+        path.setAttribute('d', 'M1,2 L8,6 L1,10 Z');
+        // diy arrow style.
+        if ('line' in this.options) {
+            if ('arrow' in this.options.line) {
+                const line = this.options.line;
+                if ('style' in line.arrow) {
+                    Object.assign(path.style, line.arrow.style);
+                }
+                if ('d' in line.arrow && isString(line.arrow.d)) {
+                    path.setAttribute('d', line.arrow.d);
+                }
+                if ('viewBox' in line.arrow && isString(line.arrow.viewBox)) {
+                    marker.setAttribute('viewBox', line.arrow.viewBox);
+                }
+            }
+        }
+        marker.appendChild(path);
+        defs.appendChild(marker);
+        this.container.appendChild(defs);
+        // 设置link dot基础样式
+        const graphStyle = document.createElement('style');
+        graphStyle.setAttribute('class', 'flowchart-core-style');
+        const head = document.querySelector('head');
+        if (this.mode === 'link-mode') {
+            // 用户设置为可控制时，连接点展示连接效果
+            graphStyle.innerText = `
+                .link-dot:hover {
+                    r: 12px!important;
+                    stroke: red!important;
+                    fill: transparent!important;
+                }
+            `;
+        }
+        // diy dot style.
+        const {
+            r = 2,
+            fill = '#000',
+            stroke = '#000',
+            strokeWidth = 2,
+            display = 'unset',
+        } = this.options.linkDot || {};
+        graphStyle.innerText += `
+                .link-dot {
+                    r: ${r}px;
+                    fill: ${fill};
+                    stroke: ${stroke};
+                    stroke-width: ${strokeWidth}px;
+                    transition: all 0.2s ease-in-out;
+                    display: ${display};
+                }
+            `;
+        if (!document.querySelector('.flowchart-core-style')) {
+            head.appendChild(graphStyle);
+        }
+    }
+
+    /**
      * 增加节点
      * @argument {SVGGElement} node
      */
     addNode(node) {
         this.nodes.push(node);
-        this.nodeG.appendChild(node.node);
+        this.nodeGroup.appendChild(node.node);
     }
 
     /**
@@ -460,7 +510,7 @@ export default class Core {
         Object.assign(edge, config);
         edge.lineData = this.edgeData(edge);
         this.edges.push(edge);
-        this.edgeG.appendChild(edge.edge);
+        this.edgeGroup.appendChild(edge.edge);
     }
 
     /**
@@ -471,7 +521,7 @@ export default class Core {
         const index = this.nodes.findIndex(n => n.id === node.id);
         if (index !== -1) {
             this.nodes.splice(index, 1);
-            this.nodeG.removeChild(node.node);
+            this.nodeGroup.removeChild(node.node);
         }
     }
 
@@ -483,7 +533,7 @@ export default class Core {
         const index = this.edges.findIndex(e => e.id === edge.id);
         if (index !== -1) {
             this.edges.splice(index, 1);
-            this.edgeG.removeChild(edge.edge);
+            this.edgeGroup.removeChild(edge.edge);
         }
     }
 

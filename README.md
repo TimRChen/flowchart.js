@@ -39,16 +39,53 @@ Two configurable modes: link-mode and render-mode.
 
 ### Topology
 
-#### [Check Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/index.html)
-
-#### [Get Usage](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
+#### [Check Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/index.html) | [Get Usage](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
 
 ```js
 // create topology graph, just use one statement.
-const graph = new RSGraph('#svg-container', {
-    data: nodes,
+const nodes = [
+    {
+        id: 'root',
+        children: ['node1', 'node2'],
+        parent: null,
+    },
+    {
+        id: 'node1',
+        children: [],
+        parent: 'root',
+    },
+    {
+        id: 'node2',
+        children: [],
+        parent: 'root',
+    },
+];
+
+// add id attribute to node dom element.
+nodes.forEach(node => {
+    const node = document.querySelector('.node');
+    node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
 });
+
+const config = {
+    data: nodes,
+    zoom: true,
+    coreOptions: {
+        style: {
+            borderTop: '1px dashed #000',
+            overflow: 'scroll',
+        },
+        linkDot: {
+            display: 'none', // default is display: none
+        },
+        mode: 'link-mode', // set link-mode will not work.
+    },
+};
+
+const graph = new RSGraph('#svg-container', config);
 ```
+
+[`warning`] Add `data-rsgraph-id` attribute to the DOM element of node before using it.
 
 ### Flowchart
 
@@ -65,9 +102,8 @@ const graph = new RSGraph('#svg-container', {
 
 ```js
 import { Core, Node } from 'flowchart-core';
-const svgContainer = document.getElementById('svg-container');
 // initial Core.
-const container = new Core(svgContainer, {
+const core = new Core('#svg-container', {
     style: {
         width: 1000,
         height: 600,
@@ -94,17 +130,21 @@ const node = new Node({
     },
 });
 
-container.addNode(node);
+// zoom graph
+core.zoom();
+
+// add node to container
+core.addNode(node);
 ```
 
 ## API Reference
 
-### new Core(svgElement, options)
+### new Core(selectors, options)
 
-| prop       | type                        | desc                  | must |
-| :--------- | :-------------------------- | :-------------------- | :--- |
-| svgElement | `SvgElement<svg>`           | _Svg DOM element_     | 1    |
-| options    | [coreOptions](#coreoptions) | _core config options_ | 1    |
+| prop      | type                                                                            | desc                    | must |
+| :-------- | :------------------------------------------------------------------------------ | :---------------------- | :--- |
+| selectors | [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) | _Svg DOM selector name_ | 1    |
+| options   | [coreOptions](#coreoptions)                                                     | _core config options_   | 1    |
 
 #### coreOptions
 
@@ -272,15 +312,7 @@ container.addNode(node);
 
 *   #### Usage:
 
-    > [`Warning⚠️`] Add id attribute to the DOM element of node before using it.
-
     ```js
-    const nodes = [{...}, ..., {...}]; // mock nodes
-    // add id attribute to node dom element.
-    nodes.forEach(node => {
-        const node = document.querySelector('.node');
-        node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
-    });
     const config = {
         data: nodes,
         zoom: true,
@@ -309,12 +341,13 @@ container.addNode(node);
 | deleteEdge(edge)                   | `Function` | _delete edge data and remove edge from svg container_                                                                                                |
 | showSvgElement(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                                 |
 | hiddenSvgElement(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                               |
+| zoom()                             | `Function` | _make graph zoom in or zoom out. drag-and-drop are not supported after called zoom()_                                                                |
 
 #### Usage:
 
 ```js
 // eg. how to appendChild a edge in core instance.
-const coreInstance = new Core(svgContainer, { ... });
+const coreInstance = new Core('#svg-container', { ... });
 const edgeInstance = new Edge({ ... });
 coreInstance.addEdge(edgeInstance, {
     source: sourceNode.id,
@@ -334,7 +367,7 @@ coreInstance.addEdge(edgeInstance, {
 
 ```js
 // eg. how to change the position attribute.
-const coreInstance = new Core(svgContainer, { ... });
+const coreInstance = new Core('#svg-container', { ... });
 const nodeInstance = new Node({ ... });
 nodeInstance.changePosition({
     x: 130,
@@ -350,13 +383,13 @@ nodeInstance.changePosition({
 
 -   #### Arguments:
 
-    | prop         | type              | desc                        |
-    | :----------- | :---------------- | :-------------------------- |
-    | svgContainer | `SvgElement<svg>` | _Svg Dom_                   |
-    | nodes        | `Array<Object>`   | _node dom list_             |
-    | edges        | `Array<Object>`   | _edge dom list_             |
-    | nodeG        | `SvgElement<g>`   | _\<g> tag. nodes container_ |
-    | edgeG        | `SvgElement<g>`   | _\<g> tag. edges container_ |
+    | prop      | type              | desc                        |
+    | :-------- | :---------------- | :-------------------------- |
+    | container | `SvgElement<svg>` | _Svg Dom_                   |
+    | nodes     | `Array<Object>`   | _node dom list_             |
+    | edges     | `Array<Object>`   | _edge dom list_             |
+    | nodeG     | `SvgElement<g>`   | _\<g> tag. nodes container_ |
+    | edgeG     | `SvgElement<g>`   | _\<g> tag. edges container_ |
 
 ### `Node`
 
@@ -373,7 +406,7 @@ nodeInstance.changePosition({
 
     ```js
     // eg. how to make a node instance visible or hidden.
-    const coreInstance = new Core(svgContainer, { ... });
+    const coreInstance = new Core('#svg-container', { ... });
     const nodeInstance = new Node({
         position: {
             x: 100,
@@ -409,7 +442,7 @@ nodeInstance.changePosition({
 
     ```js
     // eg. create edge instance & append child on svg
-    const coreInstance = new Core(svgContainer, { ... })
+    const coreInstance = new Core('#svg-container', { ... })
     const edgeInstance = new Edge({
         style: {
             stroke: 'deepskyblue',
