@@ -27,8 +27,11 @@ const core = new Core(selectors, {
     mode: 'link-mode', // must need. default is false 是否可配置流程
 });
 
-// 缩放功能，开启后 mode 即变为render-mode，注意，此处再设置为 link-mode 无效
+// 缩放功能，开启后 mode 即变为render-mode
 core.zoom();
+
+// 关闭缩放功能，mode 变为原有options.mode配置
+core.zoomClose();
 
 // 动态设置连接模式
 // core.mode = 'render-mode';

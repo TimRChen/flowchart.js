@@ -342,6 +342,7 @@ core.addNode(node);
 | showSvgElement(svgElement, type)   | `Function` | _show a svg element. enum value is 'node' or 'edge'_                                                                                                 |
 | hiddenSvgElement(svgElement, type) | `Function` | _hidden a svg element. enum value is 'node' or 'edge'_                                                                                               |
 | zoom()                             | `Function` | _make graph zoom in or zoom out. drag-and-drop are not supported after called zoom()_                                                                |
+| zoomClose()                        | `Function` | _close zoom，Core.mode value back to Core.options.mode value_                                                                                        |
 
 #### Usage:
 

@@ -11,6 +11,9 @@ import {
     getMidYPath,
 } from '../utils/path.js';
 
+import * as d3 from 'd3-selection';
+import * as d3Zoom from 'd3-zoom';
+
 const isString = fn => typeof fn === 'string';
 
 const nodeGroupClass = 'graph';
@@ -84,9 +87,6 @@ export default class Core {
      * 缩放
      */
     zoom() {
-        this.mode = 'render-mode';
-        const d3 = require('d3-selection');
-        const d3Zoom = require('d3-zoom');
         const svg = d3.select(this.selectors);
         const g = d3.selectAll('g').filter('.graph, .edges');
         const zoomRange = [0.5, 8];
@@ -97,6 +97,19 @@ export default class Core {
                 g.attr('transform', d3.event.transform);
             });
         svg.call(d3ZoomEvent).on('dblclick.zoom', null);
+        this.mode = 'render-mode';
+    }
+
+    /**
+     * 关闭缩放
+     */
+    zoomClose() {
+        const svg = d3.select(this.selectors);
+        svg.call(d3Zoom.zoom())
+            .on('wheel.zoom', null)
+            .on('mousedown.zoom', null)
+            .on('dblclick.zoom', null);
+        this.mode = this.options.mode;
     }
 
     /**

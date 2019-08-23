@@ -339,6 +339,7 @@ core.addNode(node);
 | showSvgElement(svgElement, type)   | `Function` | _显示 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
 | hiddenSvgElement(svgElement, type) | `Function` | _隐藏 SVG 元素。枚举值为“node”或“edge”_                                                                                               |
 | zoom()                             | `Function` | _开启缩放功能，开启后 mode 自动变为 render-mode，渲染模式下不支持节点连接及节点拖拽_                                                  |
+| zoomClose()                        | `Function` | _关闭缩放功能，关闭后 mode 自动变为 Core.options.mode 值_                                                                             |
 
 #### Usage:
 
