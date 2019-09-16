@@ -4,7 +4,7 @@
   "description": "tiny flowchart-js lib",
   "main": "dist/flowchart-core.min.js",
   "scripts": {
-    "dev": "parcel example/layout/RSGraph/index.html",
+    "dev": "parcel example/layout/SingleFlow/index.html",
     "dev-basic": "parcel example/basic/index.html",
     "build": "parcel build src/index.js --out-file flowchart-core.min.js --no-source-maps --no-cache --global flowchart-core"
   },

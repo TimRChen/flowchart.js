@@ -7,9 +7,11 @@ import { typeOf } from '../utils/tools.js';
  */
 export default class RSGraph {
     constructor(selectors, config) {
-        const { data } = config;
+        const { data, coreOptions = {}, direction = 'y-axis' } = config;
         this.nodes = this.initData(data);
         this.core = {};
+        this.coreOptions = coreOptions;
+        this.direction = direction;
         this.init(selectors, config);
     }
 
@@ -170,6 +172,7 @@ export default class RSGraph {
      */
     getPosition(node, rootNode, len) {
         const { width, height } = node;
+        const { direction } = this;
         if (
             width === 0 ||
             height === 0 ||
@@ -181,8 +184,15 @@ export default class RSGraph {
         const baseWidth = width * 2;
         const baseHeight = height * 2;
         const { x, y } = rootNode.position;
-        const xPosition = x + baseWidth * len;
-        const yPosition = y + baseHeight;
+        let xPosition = 0;
+        let yPosition = 0;
+        if (direction === 'y-axis') {
+            xPosition = x + baseWidth * len;
+            yPosition = y + baseHeight;
+        } else if (direction === 'x-axis') {
+            xPosition = x + baseWidth;
+            yPosition = y + baseHeight * len;
+        }
         node.position = {
             x: xPosition,
             y: yPosition,
@@ -230,13 +240,22 @@ export default class RSGraph {
      * @argument {Object} rootNode
      */
     drawLink(nodes, rootNode) {
+        const {
+            line: { style = {} },
+        } = this.coreOptions;
+        let dotLink = 'bottom';
+        let dotEndLink = 'top';
+        if (this.direction === 'x-axis') {
+            dotLink = 'right';
+            dotEndLink = 'left';
+        }
         nodes.forEach(node => {
-            const edge = new Edge();
+            const edge = new Edge({ style });
             this.core.addEdge(edge, {
                 source: rootNode.id,
                 target: node.id,
-                dotLink: 'bottom',
-                dotEndLink: 'top',
+                dotLink,
+                dotEndLink,
             });
         });
     }

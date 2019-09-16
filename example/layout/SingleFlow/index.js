@@ -1,11 +1,6 @@
 import { RSGraph } from '../../../src/layout/index.js';
 const data = require('./config/nodes.json');
 
-// sort data.
-data.sort((a, b) => (a.title > b.title ? 1 : -1));
-// random data.
-// data.sort(() => (Math.random() * 10 > 5 ? -1 : 1))
-
 // set node width & height
 const width = 50;
 const height = 50;
@@ -30,13 +25,9 @@ nodes.forEach(node => {
 const config = {
     data: nodes,
     // 可选
-    zoom: true, // 默认为 false
-    direction: 'y-axis', // x-axis || y-axis 默认为 y-axis 即纵向拓扑
+    zoom: false, // 默认为 false
+    direction: 'x-axis', // x-axis || y-axis 默认为 y-axis 即纵向拓扑
     coreOptions: {
-        style: {
-            borderTop: '1px dashed #000',
-            overflow: 'scroll',
-        },
         line: {
             style: {
                 stroke: 'deepskyblue',
@@ -51,7 +42,7 @@ const config = {
         linkDot: {
             display: 'none',
         },
-        mode: 'link-mode', // set link-mode will not work.
+        mode: 'render-mode', // set link-mode will not work.
     },
 };
 

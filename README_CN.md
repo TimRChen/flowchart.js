@@ -40,37 +40,61 @@
 #### [查看 Demo](https://timrchen.github.io/demo-item-display/flowchart-core/rsgraph/dist/index.html) | [查看示例代码](https://github.com/TimRChen/flowchart-core/blob/master/example/layout/RSGraph/index.js)
 
 ```js
+import { RSGraph } from 'flowchart-core';
 const nodes = [
     {
         id: 'root',
         children: ['node1', 'node2'],
+        title: '开始',
+        desc: '1',
         parent: null,
     },
     {
         id: 'node1',
         children: [],
+        title: '进行中',
+        desc: '2',
         parent: 'root',
     },
     {
         id: 'node2',
         children: [],
+        title: '结束',
+        desc: '3',
         parent: 'root',
     },
 ];
 
-// add id attribute to node dom element.
+// create node div dom element. this just a case.
 nodes.forEach(node => {
-    const node = document.querySelector('.node');
-    node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
+    const { title, desc } = node;
+    const body = document.querySelector('body');
+    const div = document.createElement('div');
+    div.setAttribute('data-rsgraph-id', node.id);
+    div.setAttribute('class', 'item');
+    div.innerHTML = `<div class="desc">${desc}</div><div class="title">${title}</div>`;
+    body.appendChild(div);
 });
 
 const config = {
     data: nodes,
-    zoom: true,
+    zoom: true, // 默认为 false
+    direction: 'x-axis', // x-axis || y-axis 默认为 y-axis 即纵向拓扑
     coreOptions: {
         style: {
             borderTop: '1px dashed #000',
             overflow: 'scroll',
+        },
+        line: {
+            style: {
+                stroke: 'deepskyblue',
+            },
+            arrow: {
+                style: {
+                    fill: '#888',
+                },
+                viewBox: '0 0 18 18',
+            },
         },
         linkDot: {
             display: 'none', // default is display: none
@@ -301,18 +325,20 @@ core.addNode(node);
 -   #### 类型: { data: [], zoom: true, coreOptions: {} }
 -   #### 参数:
 
-    | prop        | type                        | desc               | must |
-    | :---------- | :-------------------------- | :----------------- | :--- |
-    | data        | `Array`                     | _node 间关系数据_  | 1    |
-    | zoom        | `Boolean`                   | _是否开启缩放功能_ | 0    |
-    | coreOptions | [coreOptions](#coreoptions) | _core 类配置项_    | 0    |
+    | prop        | type                        | desc                         | must |
+    | :---------- | :-------------------------- | :--------------------------- | :--- |
+    | data        | `Array`                     | _node 间关系数据_            | 1    |
+    | zoom        | `Boolean`                   | _是否开启缩放功能_           | 0    |
+    | direction   | `String`                    | _确认拓扑方向是横向还是纵向_ | 0    |
+    | coreOptions | [coreOptions](#coreoptions) | _core 类配置项_              | 0    |
 
 *   #### Usage:
 
     ```js
     const config = {
         data: nodes,
-        zoom: true,
+        zoom: true, // 默认为 false
+        direction: 'x-axis', // x-axis || y-axis 默认为 y-axis 即纵向拓扑
         coreOptions: {
             style: {
                 borderTop: '1px dashed #000',

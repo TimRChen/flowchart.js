@@ -43,37 +43,61 @@ Two configurable modes: link-mode and render-mode.
 
 ```js
 // create topology graph, just use one statement.
+import { RSGraph } from 'flowchart-core';
 const nodes = [
     {
         id: 'root',
         children: ['node1', 'node2'],
+        title: 'start',
+        desc: '1',
         parent: null,
     },
     {
         id: 'node1',
         children: [],
+        title: 'doing',
+        desc: '2',
         parent: 'root',
     },
     {
         id: 'node2',
         children: [],
+        title: 'end',
+        desc: '3',
         parent: 'root',
     },
 ];
 
-// add id attribute to node dom element.
+// create node div dom element. this just a case.
 nodes.forEach(node => {
-    const node = document.querySelector('.node');
-    node.setAttribute('data-rsgraph-id', node.id); // for query node dom.
+    const { title, desc } = node;
+    const body = document.querySelector('body');
+    const div = document.createElement('div');
+    div.setAttribute('data-rsgraph-id', node.id);
+    div.setAttribute('class', 'item');
+    div.innerHTML = `<div class="desc">${desc}</div><div class="title">${title}</div>`;
+    body.appendChild(div);
 });
 
 const config = {
     data: nodes,
-    zoom: true,
+    zoom: true, // default is false
+    direction: 'x-axis', // x-axis || y-axis. default value is 'y-axis'
     coreOptions: {
         style: {
             borderTop: '1px dashed #000',
             overflow: 'scroll',
+        },
+        line: {
+            style: {
+                stroke: 'deepskyblue',
+            },
+            arrow: {
+                style: {
+                    fill: '#888',
+                },
+                viewBox: '0 0 18 18',
+            },
         },
         linkDot: {
             display: 'none', // default is display: none
@@ -308,6 +332,7 @@ core.addNode(node);
     | :---------- | :-------------------------- | :-------------------- | :--- |
     | data        | `Array`                     | _node relation data_  | 1    |
     | zoom        | `Boolean`                   | _zoom in or zoom out_ | 0    |
+    | direction   | `String`                    | _change the direction of topological_ | 0    |
     | coreOptions | [coreOptions](#coreoptions) | _core config options_ | 0    |
 
 *   #### Usage:
@@ -316,6 +341,7 @@ core.addNode(node);
     const config = {
         data: nodes,
         zoom: true,
+        direction: 'x-axis', // x-axis || y-axis. default value is 'y-axis'
         coreOptions: {
             style: {
                 borderTop: '1px dashed #000',

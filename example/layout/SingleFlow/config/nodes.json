@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "title": "开始",
+        "desc": "1",
+        "children": ["2"],
+        "parent": null
+    },
+    {
+        "id": "2",
+        "title": "过程中",
+        "desc": "2",
+        "children": ["3"],
+        "parent": "1"
+    },
+    {
+        "id": "3",
+        "title": "结束",
+        "desc": "3",
+        "children": [],
+        "parent": "2"
+    }
+]
