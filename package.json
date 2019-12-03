@@ -22,7 +22,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TimRChen/flowchart-core.git"
-  },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+    "url": "git+https://github.com/TimRChen/flowchart.js.git"
+  }
 }
