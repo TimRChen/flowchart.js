@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "d3-selection": "^1.4.0",
-    "d3-zoom": "^1.8.3"
+    "d3-zoom": "^3.0.0"
   },
   "repository": {
     "type": "git",
